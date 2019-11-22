@@ -2,6 +2,7 @@
 
 namespace app\controller;
 
+use app\annotation\Jwt;
 use app\annotation\Param;
 use app\BaseController;
 use think\annotation\route\Route;
@@ -27,6 +28,7 @@ class Index extends BaseController
      * @Route(value="/test",method="GET")
      * @Param(value="name",rule={"require","number","alphaDash"})
      * @Param(value="age",rule={"require","number"})
+     * @Jwt()
      */
     public function test()
     {
