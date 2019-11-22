@@ -3,6 +3,7 @@ declare (strict_types = 1);
 
 namespace app\annotation\handler;
 
+use app\validate\BaseValidate;
 use Doctrine\Common\Annotations\Annotation;
 use think\annotation\handler\Handler;
 
@@ -20,7 +21,7 @@ class Param extends Handler
         }elseif (is_string($validateRules[0])){
             $validateModel = new $validateRules[0]();
             if (isset($validateModel->rule)){
-                $rules = array_merge($annotationRule,$validateRules);
+                $rules = $this->getAnnotationValidateSceneRule($annotationRule,$validateRules[1],$validateModel);
             }else{
                 $rules = $annotationRule;
             }
@@ -28,6 +29,24 @@ class Param extends Handler
             $rules = array_merge($annotationRule,$validateRules[0]);
         }
         $rule->validate($rules);
+    }
+
+    protected function getAnnotationValidateSceneRule($annotationRule,$scene,BaseValidate $validateModel){
+        $rules = [];
+        if (isset($validateModel->scene[$scene])){
+            foreach ($validateModel->rule as $key => $item){
+                $ruleItem = explode('|',$key);
+                if (in_array($ruleItem[0],$validateModel->scene[$scene])){
+                    $rules[$key] = $item;
+                }else{
+                    continue;
+                }
+            }
+            $rules = array_merge($annotationRule,$rules);
+        }else{
+            $rules = array_merge($annotationRule,$validateModel->rule);
+        }
+        return $rules;
     }
 
     protected function getAnnotationValidateRule(Annotation $annotation){

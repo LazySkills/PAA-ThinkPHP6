@@ -1,7 +1,7 @@
 <?php
 /** Created by 嗝嗝<china_wangyu@aliyun.com>. Date: 2019-11-20  */
 
-namespace app\common\authentication\model;
+namespace app\common\authentication;
 
 use app\exception\AuthenticationException;
 use Firebase\JWT\JWT as FirebaseJwt;
@@ -57,7 +57,7 @@ class Jwt
             }
 
             try {
-                return (array)\Firebase\JWT\JWT::decode($token, $this->getKey(), ['HS256']);
+                return (array)\Firebase\JWT\JWT::decode($token, $this->key, ['HS256']);
             } catch (\Firebase\JWT\SignatureInvalidException $exception) {  //签名不正确
                 throw new AuthenticationException('令牌签名不正确');
             } catch (\Firebase\JWT\BeforeValidException $exception) {  // 签名在某个时间点之后才能用
@@ -78,7 +78,7 @@ class Jwt
 
     public function refresh()
     {
-        $payload = $this->check();
+        $payload = $this->decode();
         $this->uniqueId = $payload['uniqueId'];
         $this->signature = $payload['signature'];
         return $this->create();

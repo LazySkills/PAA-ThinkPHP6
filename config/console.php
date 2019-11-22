@@ -5,7 +5,8 @@
 return [
     // 指令定义
     'commands' => [
-        \think\annotation\command\Annotation::class,
-        \think\annotation\command\Handler::class
+        \think\annotation\command\make\Annotation::class,
+        \think\annotation\command\make\Handler::class,
+        \think\annotation\command\make\Doc::class
     ],
 ];
