@@ -1,0 +1,31 @@
+{extend name="apidoc/layout/main" /}
+
+
+{block name="content"}
+<div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+        <!-- top 菜单 -->
+        {include name="apidoc/layout/main" /}
+        <!-- 上边菜单 -->
+        {include file='apidoc/layout/top'}
+        <!-- 侧边菜单 -->
+        {include file='apidoc/layout/left'}
+        <!-- 页面标签 -->
+        {include file='apidoc/layout/tag'}
+        <!-- 主体内容 -->
+        {include file='apidoc/layout/content'}
+        <!-- 辅助元素，一般用于移动设备下遮罩 -->
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+    layui.config({
+        base: '/static/apidoc/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use('index');
+</script>
+{/block}

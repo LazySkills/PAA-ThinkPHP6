@@ -1,0 +1,65 @@
+{include file='apidoc:public:header'}
+<!-- Preloader - style you can find in spinners.css -->
+<div class="preloader">
+    <svg class="circular" viewbox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" fill="none" r="20" stroke-miterlimit="10" stroke-width="2">
+        </circle>
+    </svg>
+</div>
+<!-- Main wrapper  -->
+<div id="main-wrapper">
+    <div class="unix-login">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-4">
+                    <div class="login-content card">
+                        <div class="login-form">
+                            <h4>
+                                APIDOC 管理系统
+                            </h4>
+                            <form>
+                                <div class="form-group">
+                                    <label>
+                                        用户名
+                                    </label>
+                                    <input class="form-control" name="user_name" placeholder="name" type="name">
+                                    </input>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        密码
+                                    </label>
+                                    <input class="form-control" name="user_pass" placeholder="Password" type="password">
+                                    </input>
+                                </div>
+                                <button class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="form_submit()" type="button">
+                                    Sign in
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Wrapper -->
+
+{include file='apidoc:public:footer'}
+<script>
+    $(document).keyup(function(event) {
+        if (event.keyCode == 13) {
+            form_submit();
+        }
+    });
+    function form_submit(){
+        var data = {
+            'user_name' :  $('[name= user_name]').val(),
+            'user_pass' :  $('[name= user_pass]').val(),
+        };
+        var returnData = _post('/apidoc/loginIn',data);
+        console.log(returnData)
+        window.location.href = returnData.data.url;
+    }
+
+</script>
