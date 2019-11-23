@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="/static/apidoc/layuiadmin/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/apidoc/layuiadmin/style/admin.css" media="all"/>
     <link rel="stylesheet" href="/static/apidoc/layuiadmin/style/template.css" media="all">
+    <link href="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.min.css" rel="stylesheet">
 </head>
 <body layadmin-themealias="default">
 {block name="content"}
 内容
 {/block}
 <script src="/static/apidoc/layuiadmin/layui/layui.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.min.js"></script>
 
 {block name="js"}
 
@@ -23,3 +26,15 @@
 
 </body>
 </html>
+<script>
+    //页面加载json格式化
+    $(function () {
+        $(".layui-code").each(function (i) {
+            console.log($(this))
+            var json = $(this).html();
+            if (json != '' && json != 'undefined'){
+                $(this).JSONView(json);
+            }
+        })
+    });
+</script>

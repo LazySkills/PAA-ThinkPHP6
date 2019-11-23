@@ -27,7 +27,7 @@ class ApiDoc extends BaseController
     }
 
     public function list(){
-        return view('',['edit'=>true]);
+        return view('',['edit'=>session('isEdit')]);
     }
 
     public function getList(){
@@ -55,6 +55,8 @@ class ApiDoc extends BaseController
         }
         $apiInfo['action'] = $params['action'];
         $apiInfo['group'] = $params['group'];
+        $apiInfo['success'] = json_encode($apiInfo['success']);
+        $apiInfo['error'] = json_encode($apiInfo['error']);
         return view('',['info'=>$apiInfo,'title'=>'API接口详情']);
     }
 
@@ -106,7 +108,7 @@ class ApiDoc extends BaseController
 
     public function loginIn(){
         if (request()->isPost()){
-            if (input('user_name') == 'admin' and input('user_pass') == 'supper'){
+            if (input('') == 'admin' and input('password') == 'supper'){
                 session('apiAuthorize',json_encode(input()));
                 session('isEdit',true);
                 return json([
@@ -116,7 +118,7 @@ class ApiDoc extends BaseController
                     ]
                 ],200);
             }
-            if (input('user_name') == 'web' and input('user_pass') == '123456'){
+            if (input('username') == 'web' and input('password') == '123456'){
                 session('apiAuthorize',json_encode(input()));
                 session('isEdit',false);
                 return json([
@@ -128,6 +130,11 @@ class ApiDoc extends BaseController
             }
         }
         throw new \Exception('登录失败');
+    }
+
+    public function outLogin(){
+        session('apiAuthorize',null);
+        return redirect('/apidoc/login');
     }
 
     protected function getApiDocPaginate(){
