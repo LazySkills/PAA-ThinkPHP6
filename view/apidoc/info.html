@@ -105,12 +105,8 @@
                                 <tbody>
                                 {foreach $info.return_params as $key=>$vo}
                                 <tr>
-                                    <td><input type="text" lay-verify="required" name="return_params[name][]"
-                                               value="{$key}" placeholder="请输入参数名称" autocomplete="off"
-                                               class="layui-input"></td>
-                                    <td><input type="text" lay-verify="required" name="return_params[value][]"
-                                               value="{$vo}" placeholder="请输入参数注解" autocomplete="off"
-                                               class="layui-input"></td>
+                                    <td>{$key}</td>
+                                    <td>{$vo}</td>
                                 </tr>
                                 {/foreach}
                                 </tbody>
