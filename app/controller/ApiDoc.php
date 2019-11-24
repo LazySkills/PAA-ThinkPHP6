@@ -148,15 +148,17 @@ class ApiDoc extends BaseController
     protected function getApiDocPaginate(){
         $apiList = json_decode(file_get_contents(root_path().$this->path),true);
         $apiDocs = [];
-        $keyword = input('keyword');
-        foreach($apiList as $key => $list){
-            foreach($list as $doc => $route){
-                if (session('isEdit') != true && $route['hide'] == true) continue;
-                if (empty($keyword) or stristr($key,$keyword) or stristr($doc,$keyword)){
-                    $route['action'] = $doc;
-                    $route['group'] = $key;
-                    unset($route['validate']);
-                    array_push($apiDocs,$route);
+        if (!empty($apiList)){
+            $keyword = input('keyword');
+            foreach($apiList as $key => $list){
+                foreach($list as $doc => $route){
+                    if (session('isEdit') != true && $route['hide'] == true) continue;
+                    if (empty($keyword) or stristr($key,$keyword) or stristr($doc,$keyword)){
+                        $route['action'] = $doc;
+                        $route['group'] = $key;
+                        unset($route['validate']);
+                        array_push($apiDocs,$route);
+                    }
                 }
             }
         }
@@ -167,6 +169,7 @@ class ApiDoc extends BaseController
     }
 
     protected function paginate(array $data){
+        if (empty($data)) return [];
         $page = input('page') ?? 1;
         $limit = input('limit') ?? 10;
         return array_chunk($data,$limit,true)[$page -1];

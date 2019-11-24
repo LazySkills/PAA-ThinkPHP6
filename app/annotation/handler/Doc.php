@@ -17,7 +17,7 @@ class Doc extends Handler
             $data[$annotation->group][$annotation->value] ?? [],
             $rule
         );
-        $data[$annotation->group][$annotation->value]['hide'] = $annotation->hide;
+        $data[$annotation->group][$annotation->value]['hide'] = $annotation->hide == 'false' ? false : true ;
         file_put_contents(root_path().$this->path,json_encode($data,FILE_USE_INCLUDE_PATH));
     }
 
