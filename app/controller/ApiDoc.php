@@ -57,10 +57,13 @@ class ApiDoc extends BaseController
         $apiInfo['group'] = $params['group'];
         $apiInfo['success'] = json_encode($apiInfo['success']);
         $apiInfo['error'] = json_encode($apiInfo['error']);
-        return view('',['info'=>$apiInfo,'title'=>'API接口详情']);
+        return view('',['info'=>$apiInfo,'title'=>'API接口详情','isEdit'=>session('isEdit')]);
     }
 
     public function edit(){
+        if (session('isEdit') !== true){
+            throw new \Exception('你没有编辑权限');
+        }
         $params = request()->get();
         $apiList = json_decode(file_get_contents(root_path().$this->path),true);
         $apiInfo = $apiList[$params['group']][$params['action']];
@@ -77,7 +80,7 @@ class ApiDoc extends BaseController
         $apiInfo['group'] = $params['group'];
         $apiInfo['success'] = json_encode($apiInfo['success']);
         $apiInfo['error'] = json_encode($apiInfo['error']);
-        return view('',['info'=>$apiInfo,'title'=>'编辑API接口']);
+        return view('',['info'=>$apiInfo,'title'=>'编辑API接口','isEdit'=>session('isEdit')]);
     }
 
     public function save(){

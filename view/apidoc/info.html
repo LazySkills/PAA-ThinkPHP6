@@ -91,6 +91,33 @@
                         </div>
                     </div>
                 </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">返回参数：</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" id="return_params">
+                                <thead>
+                                <tr>
+                                    <th>参数名称</th>
+                                    <th>参数注解</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {foreach $info.return_params as $key=>$vo}
+                                <tr>
+                                    <td><input type="text" lay-verify="required" name="return_params[name][]"
+                                               value="{$key}" placeholder="请输入参数名称" autocomplete="off"
+                                               class="layui-input"></td>
+                                    <td><input type="text" lay-verify="required" name="return_params[value][]"
+                                               value="{$vo}" placeholder="请输入参数注解" autocomplete="off"
+                                               class="layui-input"></td>
+                                </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
