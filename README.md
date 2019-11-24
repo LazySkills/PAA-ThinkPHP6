@@ -60,6 +60,18 @@ http://127.0.0.1:8000/apidoc/
 
 > 浏览者只有访问权限
 
+## 感谢
+
+`PAA-ThinkPHP6` 由以下项目组成和依赖。
+
+万分感谢，以下排名不分先后
+
+- [ThinkPHP v6](https://github.com/top-think/framework) 文档: https://www.kancloud.cn/manual/thinkphp6_0
+- [firebase/php-jwt](https://packagist.org/packages/firebase/php-jwt) php-jwt验证器
+- [LazySkills/think-annotation](https://github.com/LazySkills/think-annotation) 优秀注解扩展
+
+> 再次感谢，希望大家能帮这几个项目点点`star`。
+
 ## 维护与提问
 
 ### 更新
