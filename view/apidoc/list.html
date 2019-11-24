@@ -1,0 +1,80 @@
+{extend name="apidoc/layout/main" /}
+
+{block name="title"}
+主页
+{/block}
+
+{block name="content"}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <!-- table-search -->
+                <div class="layui-inline">
+                    <div class="layui-input-inline" >
+                        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="关键字"/>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-comm" data-type="reload">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+                <!-- end table-search -->
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="demo" lay-skin="line" lay-filter="demo" lay-size="lg"></table>
+            <script type="text/html" id="barDemo">
+                {eq name="edit" value="true"}
+                    <button class="layui-btn layui-btn-xs" lay-event="edit">
+                        <i class="layui-icon"></i>编辑
+                    </button>
+                {/eq}
+                <button class="layui-btn layui-btn-xs" lay-event="info">
+                    详情
+                </button>
+            </script>
+            <!-- end table-set-tpl -->
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+    var tableConfig = {
+        elem: '#demo',
+        url: '/apidoc/getList', //请求地址
+        method: 'POST', //方式
+        id: 'listReload', //生成 Layui table 的标识 id，必须提供，用于后文刷新操作，笔者该处出过问题
+        where: {type: "all"}, //请求后端接口的条件，该处就是条件错误点，按照官方给出的代码示例，原先写成了 where: { key : { type: "all" } }，结果并不是我想的那样，如此写，key 将是后端的一个类作为参数，里面有 type 属性，如果误以为 key 是 Layui 提供的格式，那就大错特错了
+        response: { //定义后端 json 格式，详细参见官方文档
+            statusName: 'code', //状态字段名称
+            statusCode: '200', //状态字段成功值
+            msgName: 'msg', //消息字段
+            countName: 'count', //总数字段
+            dataName: 'data' //数据字段
+        }
+        , cols: [[
+            {checkbox: true, fixed: true}
+            , {field: 'action', title: '方法', fixed: true}
+            , {field: 'group', title: '分组'}
+            , {field: 'rule', title: 'rule'}
+            , {field: 'action', title: 'action'}
+            , {field: 'route', title: 'route'}
+            , {field: 'right', title: '操作', toolbar: '#barDemo', align: 'center', style: 'background-color: #eee;',width: 150}
+        ]]
+        , page: { //是否分页
+            limits: [5, 10, 15]
+            , limit: 5
+        }
+        , height: 'auto'
+    };
+    var searchNames = ['keyword'];
+</script>
+
+
+{include file="apidoc/layout/js" /}
+
+{/block}

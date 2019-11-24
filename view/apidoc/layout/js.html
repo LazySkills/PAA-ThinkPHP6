@@ -1,0 +1,182 @@
+<script>
+    layui.config({
+        base: '/static/apidoc/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','laydate','form'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , element = layui.element
+            , router = layui.router()
+            , table = layui.table
+            , form = layui.form
+            , laydate = layui.laydate
+            , layer = layui.layer;
+
+        element.render();
+        form.render();
+        table.render(tableConfig)
+        //开始日期
+        var insStart = laydate.render({
+            elem: '#startTime'
+            ,min: 0
+            ,done: function(value, date){
+                //更新结束日期的最小日期
+                insEnd.config.min = lay.extend({}, date, {
+                    month: date.month - 1
+                });
+
+                //自动弹出结束日期的选择器
+                insEnd.config.elem[0].focus();
+            }
+        });
+
+        //结束日期
+        var insEnd = laydate.render({
+            elem: '#endTime'
+            ,min: 0
+            ,done: function(value, date){
+                //更新开始日期的最大日期
+                insStart.config.max = lay.extend({}, date, {
+                    month: date.month - 1
+                });
+            }
+        });
+        /* 触发事件 */
+        var active = {
+            tabChange: function () {
+                /* 切换到指定Tab项 */
+                element.tabChange('demo', '33');
+            }
+            , handle: function () {
+                var link = $(this).attr('data-link');
+                layer.open({
+                    type: 2
+                    , content: link
+                    , shadeClose: true
+                    , area: ['100%', '100%']
+                    , maxmin: true
+                    , success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                        //body.find('input').attr('placeholder', '请输入')
+                    }
+                });
+            }
+            , ajax: function () {
+                var link = $(this).attr('data-link');
+                layer.confirm('您确定要进行当前操作吗？', {
+                    btn: ['确定', '没有'] //按钮
+                }, function () {
+                    $.get(link,function (res) {
+                        // console.log(res);
+                    }).success(function (res) {
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 2000
+                        }, function () {
+                            // history.go();
+                            self.location = document.referrer;
+                            parent.layer.close(index); //再执行关闭
+                        });
+                    })
+                        .error(function (res) {
+                            layer.msg(res.responseJSON.msg, {offset: '15px', icon: 2, time: 1000});
+                        });
+                    // layer.msg('的确很重要', {icon: 1,time:2000});
+                }, function () {
+                    layer.msg('好吧，再想想~');
+                })
+            }
+            , reload: function () {
+                var demoReload = $(tableConfig.id);
+                var searchData = {};
+
+                for (var i=0,len=searchNames.length; i<len; i++)
+                {
+                    searchData[searchNames[i]] = $('[name='+searchNames[i]+']').val();
+                }
+                // console.log(inputNames);
+                console.log(searchData);
+                //执行重载
+                table.reload(tableConfig.id, {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: searchData
+                });
+            }
+
+        };
+
+        //监听表格复选框选择
+        table.on('checkbox(demo)', function (obj) {
+            console.log(obj)
+        });
+
+
+        //监听工具条
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            switch(obj.event){
+                case 'edit':
+                    layer.open({
+                        type: 2
+                        , content: 'edit'+"?action="+data.action+"&group="+data.group
+                        , shadeClose: true
+                        , area: ['100%', '100%']
+                        , maxmin: true
+                        , success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            //body.find('input').attr('placeholder', '请输入')
+                        }
+                    });
+                    break;
+                case 'info':
+                    layer.open({
+                        type: 2
+                        , content: 'info'+"?action="+data.action+"&group="+data.group
+                        , shadeClose: true
+                        , area: ['100%', '100%']
+                        , maxmin: true
+                        , success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            //body.find('input').attr('placeholder', '请输入')
+                        }
+                    });
+                    break;
+            };
+        });
+
+        form.on('switch(lockDemo)', function(data) {
+                var link = $(data.elem).attr('data-href');
+                $.post(link,{'id':data.value}, function (res) {
+                    // console.log(res);
+                })
+                    .success(function (res) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 2000
+                        }, function () {
+                            self.location = self.location;
+                        });
+                    })
+                    .error(function (res) {
+                        layer.msg(res.responseJSON.msg, {offset: '15px', icon: 2, time: 1000});
+                    });
+
+
+        });
+        $('.layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] && active[type].call(this);
+        });
+
+    });
+
+</script>

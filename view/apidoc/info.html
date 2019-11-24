@@ -1,0 +1,175 @@
+{extend name="apidoc/layout/main" /}
+
+{block name="title"}
+主页
+{/block}
+
+{block name="content"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-card">
+            <div class="layui-card-header">{$title}</div>
+            <div class="layui-card-body">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由分组：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.group}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由名称：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.action}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由规则：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.rule}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">请求方法：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.method}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由类路：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.route}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">参数验证：</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table">
+                                <thead>
+                                    <tr>
+                                        <th>参数名称</th>
+                                        <th>参数注解</th>
+                                        <th>参数规则</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="info.validate" id="vo"}
+                                    <tr>
+                                        <td>{$vo.name}</td>
+                                        <td>{$vo.doc}</td>
+                                        <td>{$vo.rule}</td>
+                                    </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">正确返回：</label>
+                        <div class="layui-input-block">
+                            <pre class="layui-code" lay-title="" lay-height="" lay-skin="" lay-encode="">{$info.success|default=''}</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">错误返回：</label>
+                        <div class="layui-input-block">
+                            <pre class="layui-code" lay-title="" lay-height="" lay-skin="" lay-encode="">{$info.error|default=''}</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">返回参数：</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" id="return_params">
+                                <thead>
+                                <tr>
+                                    <th>参数名称</th>
+                                    <th>参数注解</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {foreach $info.return_params as $key=>$vo}
+                                <tr>
+                                    <td>{$key}</td>
+                                    <td>{$vo}</td>
+                                </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    code{
+        font-weight: bolder;
+        font-size: 20px;
+        line-height: 50px;
+        background-color: #f1f1f1;
+        padding: 5px;
+    }
+    .layui-input{
+        border: none;
+    }
+</style>
+{/block}
+
+{block name="js"}
+<script>
+    layui.config({
+        base: '/static/admin/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , element = layui.element
+            , form = layui.form;
+
+        form.render(null, 'component-form-element');
+        element.render('breadcrumb', 'breadcrumb');
+
+        form.on('submit(component-form-element)', function (data) {
+            $.post(data.form.action, data.field, function (res) {
+                // console.log(res)
+            })
+                .success(function (res) {
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 2000
+                    }, function () {
+                        // history.go();
+                        parent.location = document.referrer;
+                        parent.layer.close(index); //再执行关闭
+                    });
+                })
+                .error(function (res) {
+                    layer.msg(res.responseJSON.msg, {offset: '15px', icon: 2, time: 1000});
+                });
+            return false;
+        });
+    });
+</script>
+
+
+{/block}

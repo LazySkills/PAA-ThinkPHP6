@@ -1,0 +1,206 @@
+{extend name="apidoc/layout/main" /}
+
+{block name="title"}
+主页
+{/block}
+
+{block name="content"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-card">
+            <div class="layui-card-header">{$title}</div>
+            <div class="layui-card-body">
+                <form class="layui-form" action="/apidoc/save?action={$info.action}&group={$info.group}" method="post"
+                      lay-filter="component-form-element">
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">路由分组：</label>
+                            <div class="layui-input-block">
+                                <code class="layui-input">{$info.group}</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">路由名称：</label>
+                            <div class="layui-input-block">
+                                <code class="layui-input">{$info.action}</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">路由规则：</label>
+                            <div class="layui-input-block">
+                                <code class="layui-input">{$info.rule}</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">请求方法：</label>
+                            <div class="layui-input-block">
+                                <code class="layui-input">{$info.method}</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">路由类路：</label>
+                            <div class="layui-input-block">
+                                <code class="layui-input">{$info.route}</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">参数验证：</label>
+                            <div class="layui-input-block">
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>参数名称</th>
+                                        <th>参数注解</th>
+                                        <th>参数规则</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {volist name="info.validate" id="vo"}
+                                    <tr>
+                                        <td>{$vo.name}</td>
+                                        <td>{$vo.doc}</td>
+                                        <td>{$vo.rule}</td>
+                                    </tr>
+                                    {/volist}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">正确返回：</label>
+                            <div class="layui-input-block">
+                                <textarea placeholder="请输入内容,格式为json" name="success" class="layui-textarea">{$info.success|default=''}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">错误返回：</label>
+                            <div class="layui-input-block">
+                                <textarea placeholder="请输入内容，格式为json" name="error" class="layui-textarea">{$info.error|default=[]}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <label class="layui-form-label">返回参数：</label>
+                            <div class="layui-input-block">
+                                <table class="layui-table" id="return_params">
+                                    <thead>
+                                    <tr>
+                                        <th>参数名称</th>
+                                        <th>参数注解</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {foreach $info.return_params as $key=>$vo}
+                                    <tr>
+                                        <td><input type="text" lay-verify="required" name="return_params[name][]"
+                                                   value="{$key}" placeholder="请输入参数名称" autocomplete="off"
+                                                   class="layui-input"></td>
+                                        <td><input type="text" lay-verify="required" name="return_params[value][]"
+                                                   value="{$vo}" placeholder="请输入参数注解" autocomplete="off"
+                                                   class="layui-input"></td>
+                                        <td><button class="layui-btn" type="button" onclick="delete_tr(this)">删除</button></td>
+                                    </tr>
+                                    {/foreach}
+                                    <tr id="return_params_add">
+                                        <td colspan="3" style="text-align: center;font-size: 26px;">
+                                            加一行 <i class="layui-icon" style="font-size: 28px;">&#xe654;</i>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg6">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="component-form-element">立即提交
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    code {
+        font-weight: bolder;
+        font-size: 20px;
+        line-height: 50px;
+        background-color: #f1f1f1;
+        padding: 5px;
+    }
+
+    .layui-input {
+        border: none;
+    }
+</style>
+{/block}
+
+{block name="js"}
+<script>
+    layui.config({
+        base: '/static/apidoc/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , element = layui.element
+            , form = layui.form;
+
+        form.render(null, 'component-form-element');
+        element.render('breadcrumb', 'breadcrumb');
+
+        form.on('submit(component-form-element)', function (data) {
+            $.post(data.form.action, data.field, function (res) {
+                if (res.code == 200){
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 2000
+                    }, function () {
+                        // history.go();
+                        parent.location = document.referrer;
+                        parent.layer.close(index); //再执行关闭
+                    });
+                }else{
+                    layer.msg(res.responseJSON.msg, {offset: '15px', icon: 2, time: 1000});
+                }
+            })
+            return false;
+        });
+    });
+    $("#return_params_add").click(function () {
+        $("#return_params_add").before('<tr>\n' +
+            '                                        <td><input type="text" lay-verify="required" name="return_params[name][]" placeholder="请输入参数名称" autocomplete="off" class="layui-input"></td>\n' +
+            '                                        <td><input type="text" lay-verify="required" name="return_params[value][]" placeholder="请输入参数注解" autocomplete="off" class="layui-input"></td>\n' +
+            '                                        <td><button class="layui-btn" type="button" onclick="delete_tr(this)">删除</button></td>\n' +
+            '                                    </tr>');
+    })
+    function delete_tr(obj) {
+        $(obj).parent().parent().remove();
+    }
+</script>
+
+
+{/block}
