@@ -30,11 +30,10 @@
                     <button class="layui-btn layui-btn-xs" lay-event="edit">
                         <i class="layui-icon"></i>编辑
                     </button>
-                {else/}
-                    <button class="layui-btn layui-btn-xs" lay-event="info">
-                        详情
-                    </button>
                 {/eq}
+                <button class="layui-btn layui-btn-xs" lay-event="info">
+                    详情
+                </button>
             </script>
             <!-- end table-set-tpl -->
         </div>
@@ -64,7 +63,7 @@
             , {field: 'rule', title: 'rule'}
             , {field: 'action', title: 'action'}
             , {field: 'route', title: 'route'}
-            , {field: 'right', title: '操作', toolbar: '#barDemo', align: 'center', style: 'background-color: #eee;',width: 100}
+            , {field: 'right', title: '操作', toolbar: '#barDemo', align: 'center', style: 'background-color: #eee;',width: 150}
         ]]
         , page: { //是否分页
             limits: [5, 10, 15]

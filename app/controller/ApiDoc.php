@@ -83,6 +83,12 @@ class ApiDoc extends BaseController
     public function save(){
         if (request()->isPost()){
             $params = input();
+            $return_params = [];
+            if (isset($params['return_params']['name']) and !empty($params['return_params']['name'])){
+                foreach ($params['return_params']['name'] as $key => $value){
+                    $return_params[$value] = $params['return_params']['value'][$key];
+                }
+            }
             $success = json_decode($params['success'],true);
             $error = json_decode($params['error'],true);
             if (is_null($error) or is_null($success)){
@@ -91,6 +97,7 @@ class ApiDoc extends BaseController
             $apiList = json_decode(file_get_contents(root_path().$this->path),true);
             $apiList[$params['group']][$params['action']]['success'] = $success;
             $apiList[$params['group']][$params['action']]['error'] = $error;
+            $apiList[$params['group']][$params['action']]['return_params'] = $return_params;
             file_put_contents(root_path().$this->path,
                 json_encode($apiList),
                 FILE_USE_INCLUDE_PATH
@@ -98,9 +105,7 @@ class ApiDoc extends BaseController
             return json([
                 'msg'=>'操作成功',
                 'code'=>200,
-                'data'=>[
-                    'url' => '/apidoc/index'
-                ]
+                'data'=>[]
             ],200);
         }
         throw new \Exception('保存失败，返回值格式为：Json');
@@ -108,7 +113,7 @@ class ApiDoc extends BaseController
 
     public function loginIn(){
         if (request()->isPost()){
-            if (input('') == 'admin' and input('password') == 'supper'){
+            if (input('username') == 'admin' and input('password') == 'supper'){
                 session('apiAuthorize',json_encode(input()));
                 session('isEdit',true);
                 return json([
@@ -143,6 +148,7 @@ class ApiDoc extends BaseController
         $keyword = input('keyword');
         foreach($apiList as $key => $list){
             foreach($list as $doc => $route){
+                if (session('isEdit') != true && $route['hide'] == true) continue;
                 if (empty($keyword) or stristr($key,$keyword) or stristr($doc,$keyword)){
                     $route['action'] = $doc;
                     $route['group'] = $key;

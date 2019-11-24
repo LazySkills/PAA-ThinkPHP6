@@ -17,6 +17,7 @@ class Doc extends Handler
             $data[$annotation->group][$annotation->value] ?? [],
             $rule
         );
+        $data[$annotation->group][$annotation->value]['hide'] = $annotation->hide;
         file_put_contents(root_path().$this->path,json_encode($data,FILE_USE_INCLUDE_PATH));
     }
 
@@ -27,8 +28,9 @@ class Doc extends Handler
             'route' => $rule->getRoute(),
             'method' => $rule->getMethod(),
             'validate' => $rule->getOption('validate'),
-            'success' => $api['success'] ?? '',
-            'error' => $api['error'] ?? ''
+            'success' => $api['success'] ?? [],
+            'error' => $api['error'] ?? [],
+            'return_params' => $api['return_params'] ?? [],
         ];
     }
 }
