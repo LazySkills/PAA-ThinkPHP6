@@ -173,15 +173,12 @@
         form.on('submit(component-form-element)', function (data) {
             $.post(data.form.action, data.field, function (res) {
                 if (res.code == 200){
-                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                     layer.msg(res.msg, {
                         offset: '15px'
                         , icon: 1
                         , time: 2000
                     }, function () {
-                        // history.go();
-                        parent.location = document.referrer;
-                        parent.layer.close(index); //再执行关闭
+                        window.location = document.referrer;
                     });
                 }else{
                     layer.msg(res.responseJSON.msg, {offset: '15px', icon: 2, time: 1000});

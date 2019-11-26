@@ -2,24 +2,46 @@
 <div class="layui-side layui-side-menu">
     <div class="layui-side-scroll">
         <div class="layui-logo" onclick="window.location.href='{:url(\'index\')}'">
-            <span>APIDOC</span>
+            <span>APIDOC 接口管理平台</span>
         </div>
         <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
             lay-filter="layadmin-system-side-menu">
-            <li data-name="home" class="layui-nav-item layui-nav-itemed">
-                <a href="javascript:;" lay-tips="API文档" lay-direction="2">
-                    <i class="layui-icon layui-icon-list"></i>
-                    <cite>API文档</cite>
+            <li data-name="home" class="layui-this layui-nav-item layui-nav-itemed">
+                <a href="javascript:;" lay-href="/apidoc/main">
+                    <i class="layui-icon layui-icon-home"></i>
+                    <cite>欢迎页</cite>
                 </a>
+            </li>
+            {foreach $menus as $group => $items}
+            <li data-name="{$group|default='通用'}" class="layui-nav-item layui-nav-itemed">
+                <a href="javascript:;" lay-tips="{$group|default='通用'}" lay-direction="2">
+                    <i class="layui-icon layui-icon-app"></i>
+                    <cite>{$group|default='通用'}</cite>
+                </a>
+                {foreach $items as $doc => $item}
                 <dl class="layui-nav-child">
-                    <dd data-name="console" class="layui-this">
-                        <a href="javascript:;" lay-href="/apidoc/main">欢迎页</a>
-                    </dd>
-                    <dd data-name="console">
-                        <a href="javascript:;" lay-href="/apidoc/list">接口列表</a>
+                    <dd data-name="{$doc}">
+                        <a href="javascript:;">
+                            <i class="layui-icon layui-icon-template"></i>
+                            <cite>{$doc}</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            {eq name="isEdit" value="true"}
+                            <dd>
+                                <a lay-href="/apidoc/edit?action={$doc}&group={$group}">
+                                    <cite>编辑  ✏️</cite>
+                                </a>
+                            </dd>
+                            {/eq}
+                            <dd><a lay-href="/apidoc/info?action={$doc}&group={$group}">
+                                <cite>详情  🔎</cite>
+                            </a></dd>
+                        </dl>
                     </dd>
                 </dl>
+                {/foreach}
             </li>
+            {/foreach}
         </ul>
     </div>
 </div>
