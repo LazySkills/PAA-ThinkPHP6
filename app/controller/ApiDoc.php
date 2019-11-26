@@ -15,7 +15,8 @@ class ApiDoc extends BaseController
         if (!session('?apiAuthorize') and request()->action() != 'login'){
             return redirect('/apidoc/login');
         }
-        return display('');
+        $apiList = json_decode(file_get_contents(root_path().$this->path),true);
+        return display('',['menus'=>$apiList,'isEdit'=>session('isEdit')]);
     }
 
     public function main(){
