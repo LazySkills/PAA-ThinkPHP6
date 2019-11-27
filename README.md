@@ -80,7 +80,7 @@ http://127.0.0.1:8000/apidoc/
 - [ThinkPHP v6](https://github.com/top-think/framework) 文档: https://www.kancloud.cn/manual/thinkphp6_0
 - [firebase/php-jwt](https://packagist.org/packages/firebase/php-jwt) php-jwt验证器
 - [LazySkills/think-annotation](https://github.com/LazySkills/think-annotation) 优秀注解扩展
-- [sentsin/layui](https://github.com/sentsin/layui) 优秀注解扩展
+- [sentsin/layui](https://github.com/sentsin/layui) 优秀前端框架
 
 > 再次感谢，希望大家能帮这几个项目点点`star`。
 
