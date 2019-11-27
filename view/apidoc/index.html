@@ -1,31 +1,140 @@
-{extend name="apidoc/layout/main" /}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>PAA 接口管理平台</title>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css"/>
+</head>
+<style>
+    .layadmin-iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0
+    }
 
+    .layui-nav-tree .layui-nav-item a {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+    .layui-nav-item {
+        background-color: #20222A;
+        color: #fff;
+    }
+    .layui-side-scroll {
+        background-color: #20222A;
+        color: #fff;
+    }
+</style>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">PAA 接口管理平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item">
+                <a href="https://github.com/LazySkills/PAA-thinkphp6" target="_blank">
+                    <i class="layui-icon layui-icon-website"></i>
+                    <cite>官网</cite>
+                </a>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    {eq name="isEdit" value="true"}
+                        超级管理员
+                    {else/}
+                        浏览者
+                    {/eq}
+                </a>
+            </li>
+            <li class="layui-nav-item"><a href="/apidoc/outLogin">退出</a></li>
+        </ul>
+    </div>
 
-{block name="content"}
-<div id="LAY_app">
-    <div class="layui-layout layui-layout-admin">
-        <!-- top 菜单 -->
-        {include name="apidoc/layout/main" /}
-        <!-- 上边菜单 -->
-        {include file='apidoc/layout/top'}
-        <!-- 侧边菜单 -->
-        {include file='apidoc/layout/left'}
-        <!-- 页面标签 -->
-        {include file='apidoc/layout/tag'}
-        <!-- 主体内容 -->
-        {include file='apidoc/layout/content'}
-        <!-- 辅助元素，一般用于移动设备下遮罩 -->
-        <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
+                lay-filter="layadmin-system-side-menu">
+                <li data-name="home" class="layui-this layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;" lay-href="/apidoc/main">
+                        <i class="layui-icon layui-icon-home"></i>
+                        <cite>欢迎页</cite>
+                    </a>
+                </li>
+                {foreach $menus as $group => $items}
+                <li data-name="{$group|default='通用'}" class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;" lay-tips="{$group|default='通用'}" lay-direction="2">
+                        <i class="layui-icon layui-icon-app"></i>
+                        <cite>{$group|default='通用'}</cite>
+                    </a>
+                    {foreach $items as $doc => $item}
+                    <dl class="layui-nav-child">
+                        <dd data-name="{$doc}">
+                            <a href="javascript:;">
+                                <i class="layui-icon layui-icon-template"></i>
+                                <cite>{$doc}</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                {eq name="isEdit" value="true"}
+                                <dd style="text-align: right;font-size: 18px">
+                                    <a lay-href="/apidoc/edit?action={$doc}&group={$group}">
+                                        <cite> 编辑【{$doc}】 ✏️</cite>
+                                    </a>
+                                </dd>
+                                {/eq}
+                                <dd style="text-align: right;font-size: 18px"><a lay-href="/apidoc/info?action={$doc}&group={$group}">
+                                    <cite > 详情【{$doc}】 🔎</cite>
+                                </a></dd>
+                            </dl>
+                        </dd>
+                    </dl>
+                    {/foreach}
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body" id="LAY_app_body">
+        <!-- 内容主体区域 -->
+        <div class="layadmin-tabsbody-item layui-show">
+            <iframe src="/apidoc/main" frameborder="0" id="app-iframe" class="layadmin-iframe"></iframe>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © PAA 接口管理平台 - 底部固定区域
     </div>
 </div>
-{/block}
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<!--您的Layui代码start-->
+<script type="text/javascript">
+    layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function () {
+        var laydate = layui.laydate //日期
+            , laypage = layui.laypage //分页
+            , layer = layui.layer //弹层
+            , table = layui.table //表格
+            , carousel = layui.carousel //轮播
+            , upload = layui.upload //上传
+            , element = layui.element; //元素操作 等等...
+    });
 
-{block name="js"}
-<script>
-    layui.config({
-        base: '/static/apidoc/layuiadmin/' //静态资源所在路径
-    }).extend({
-        index: 'lib/index' //主入口模块
-    }).use('index');
+    $(document).ready(function () {
+        $("a").click(function () {
+            if ($(this).attr('lay-href')) {
+                $("#app-iframe").attr('src', $(this).attr('lay-href'))
+            }
+        })
+    })
 </script>
-{/block}

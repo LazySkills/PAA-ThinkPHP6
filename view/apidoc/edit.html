@@ -1,10 +1,12 @@
-{extend name="apidoc/layout/main" /}
-
-{block name="title"}
-主页
-{/block}
-
-{block name="content"}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>PAA 接口管理平台</title>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css"/>
+</head>
+<body>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-card">
@@ -114,7 +116,10 @@
                                         <td><input type="text" lay-verify="required" name="return_params[value][]"
                                                    value="{$vo}" placeholder="请输入参数注解" autocomplete="off"
                                                    class="layui-input"></td>
-                                        <td><button class="layui-btn" type="button" onclick="delete_tr(this)">删除</button></td>
+                                        <td>
+                                            <button class="layui-btn" type="button" onclick="delete_tr(this)">删除
+                                            </button>
+                                        </td>
                                     </tr>
                                     {/foreach}
                                     <tr id="return_params_add">
@@ -140,6 +145,8 @@
         </div>
     </div>
 </div>
+</body>
+</html>
 <style>
     code {
         font-weight: bolder;
@@ -153,34 +160,33 @@
         border: none;
     }
 </style>
-{/block}
-
-{block name="js"}
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script>
-    layui.config({
-        base: '/static/apidoc/layuiadmin/' //静态资源所在路径
-    }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function () {
-        var $ = layui.$
-            , admin = layui.admin
-            , element = layui.element
-            , form = layui.form;
+    layui.use(['laydate', 'laypage', 'layer', 'form', 'table', 'carousel', 'upload', 'element'], function () {
+        var laydate = layui.laydate //日期
+            , laypage = layui.laypage //分页
+            , layer = layui.layer //弹层
+            , form = layui.form //弹层
+            , table = layui.table //表格
+            , carousel = layui.carousel //轮播
+            , upload = layui.upload //上传
+            , element = layui.element; //元素操作 等等...
 
         form.render(null, 'component-form-element');
-        element.render('breadcrumb', 'breadcrumb');
 
         form.on('submit(component-form-element)', function (data) {
             $.post(data.form.action, data.field, function (res) {
-                if (res.code == 200){
+                console.log(res)
+                if (res.code == 200) {
                     layer.msg(res.msg, {
                         offset: '15px'
                         , icon: 1
                         , time: 2000
                     }, function () {
-                        window.location = document.referrer;
+                        history.go()
                     });
-                }else{
+                } else {
                     layer.msg(res.responseJSON.msg, {offset: '15px', icon: 2, time: 1000});
                 }
             })
@@ -194,10 +200,8 @@
             '                                        <td><button class="layui-btn" type="button" onclick="delete_tr(this)">删除</button></td>\n' +
             '                                    </tr>');
     })
+
     function delete_tr(obj) {
         $(obj).parent().parent().remove();
     }
 </script>
-
-
-{/block}

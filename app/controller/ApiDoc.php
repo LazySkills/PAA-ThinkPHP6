@@ -122,6 +122,7 @@ class ApiDoc extends BaseController
                 session('isEdit',true);
                 return json([
                     'msg'=>'登录成功',
+                    'code'=>200,
                     'data'=>[
                         'url' => '/apidoc/index'
                     ]
@@ -132,6 +133,7 @@ class ApiDoc extends BaseController
                 session('isEdit',false);
                 return json([
                     'msg'=>'登录成功',
+                    'code'=>400,
                     'data'=>[
                         'url' => '/apidoc/index'
                     ]
