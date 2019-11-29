@@ -3,9 +3,9 @@ declare (strict_types = 1);
 
 namespace app\annotation\handler;
 
-use app\validate\BaseValidate;
 use Doctrine\Common\Annotations\Annotation;
 use think\annotation\handler\Handler;
+use think\Validate;
 
 class Param extends Handler
 {
@@ -20,10 +20,11 @@ class Param extends Handler
             $rules = $annotationRule;
         }elseif (is_string($validateRules[0])){
             $validateModel = new $validateRules[0]();
-            if (isset($validateModel->rule)){
-                $rules = $this->getAnnotationValidateSceneRule($annotationRule,$validateRules[1],$validateModel);
-            }else{
+            $validateModelRules = $this->getAnnotationValidateSceneRule($annotationRule,$validateRules[1],$validateModel);
+            if (!$validateModelRules){
                 $rules = $annotationRule;
+            }else{
+                $rules = $validateModelRules;
             }
         }elseif (is_array($validateRules[0])){
             $rules = array_merge($annotationRule,$validateRules[0]);
@@ -31,12 +32,20 @@ class Param extends Handler
         $rule->validate($rules);
     }
 
-    protected function getAnnotationValidateSceneRule($annotationRule,$scene,BaseValidate $validateModel){
+    protected function getAnnotationValidateSceneRule($annotationRule,$scene,Validate $validateModel){
         $rules = [];
-        if (isset($validateModel->scene[$scene])){
-            foreach ($validateModel->rule as $key => $item){
+        $getValidateModelRule = function (){
+            return $this->rule;
+        };
+        $validateModelRules = $getValidateModelRule->call($validateModel);
+        $getValidateModelScene = function (){
+            return $this->scene;
+        };
+        $validateModelScenes = $getValidateModelScene->call($validateModel);
+        if (isset($validateModelScenes[$scene])){
+            foreach ($validateModelRules as $key => $item){
                 $ruleItem = explode('|',$key);
-                if (in_array($ruleItem[0],$validateModel->scene[$scene])){
+                if (in_array($ruleItem[0],$validateModelScenes[$scene])){
                     $rules[$key] = $item;
                 }else{
                     continue;
@@ -44,7 +53,7 @@ class Param extends Handler
             }
             $rules = array_merge($annotationRule,$rules);
         }else{
-            $rules = array_merge($annotationRule,$validateModel->rule);
+            $rules = array_merge($annotationRule,$validateModelRules);
         }
         return $rules;
     }

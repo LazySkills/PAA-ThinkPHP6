@@ -44,7 +44,7 @@ class ApiDoc extends BaseController
     public function info(){
         $params = request()->get();
         $apiList = json_decode(file_get_contents(root_path().$this->path),true);
-        $apiInfo = $apiList[$params['group']][$params['action']];
+        $apiInfo = $apiList[$params['group']][$params['groupKey']][$params['action']] ?? $apiInfo = $apiList[$params['group']][$params['action']];
         $apiInfo['validate'] = $apiInfo['validate'][0];
         foreach ($apiInfo['validate'] as $key => $item){
             $validateName = explode('|',$key);
@@ -56,6 +56,7 @@ class ApiDoc extends BaseController
         }
         $apiInfo['action'] = $params['action'];
         $apiInfo['group'] = $params['group'];
+        $apiInfo['groupKey'] = $params['groupKey'];
         $apiInfo['success'] = json_encode($apiInfo['success']);
         $apiInfo['error'] = json_encode($apiInfo['error']);
         return view('',['info'=>$apiInfo,'title'=>'API接口详情','isEdit'=>session('isEdit')]);
@@ -67,7 +68,7 @@ class ApiDoc extends BaseController
         }
         $params = request()->get();
         $apiList = json_decode(file_get_contents(root_path().$this->path),true);
-        $apiInfo = $apiList[$params['group']][$params['action']];
+        $apiInfo = $apiList[$params['group']][$params['groupKey']][$params['action']] ?? $apiInfo = $apiList[$params['group']][$params['action']];
         $apiInfo['validate'] = $apiInfo['validate'][0];
         foreach ($apiInfo['validate'] as $key => $item){
             $validateName = explode('|',$key);
@@ -79,6 +80,7 @@ class ApiDoc extends BaseController
         }
         $apiInfo['action'] = $params['action'];
         $apiInfo['group'] = $params['group'];
+        $apiInfo['groupKey'] = $params['groupKey'];
         $apiInfo['success'] = json_encode($apiInfo['success']);
         $apiInfo['error'] = json_encode($apiInfo['error']);
         return view('',['info'=>$apiInfo,'title'=>'编辑API接口','isEdit'=>session('isEdit')]);
@@ -99,9 +101,16 @@ class ApiDoc extends BaseController
                 throw new \Exception('返回值格式为：Json');
             }
             $apiList = json_decode(file_get_contents(root_path().$this->path),true);
-            $apiList[$params['group']][$params['action']]['success'] = $success;
-            $apiList[$params['group']][$params['action']]['error'] = $error;
-            $apiList[$params['group']][$params['action']]['return_params'] = $return_params;
+            if (isset($apiList[$params['group']][$params['action']])){
+                $apiList[$params['group']][$params['action']]['success'] = $success;
+                $apiList[$params['group']][$params['action']]['error'] = $error;
+                $apiList[$params['group']][$params['action']]['return_params'] = $return_params;
+            }elseif (isset($apiList[$params['group']][$params['groupKey']][$params['action']])){
+                $apiList[$params['group']][$params['groupKey']][$params['action']]['success'] = $success;
+                $apiList[$params['group']][$params['groupKey']][$params['action']]['error'] = $error;
+                $apiList[$params['group']][$params['groupKey']][$params['action']]['return_params'] = $return_params;
+            }
+
             file_put_contents(root_path().$this->path,
                 json_encode($apiList),
                 FILE_USE_INCLUDE_PATH
@@ -122,6 +131,7 @@ class ApiDoc extends BaseController
                 session('isEdit',true);
                 return json([
                     'msg'=>'登录成功',
+                    'code'=>200,
                     'data'=>[
                         'url' => '/apidoc/index'
                     ]
@@ -132,6 +142,7 @@ class ApiDoc extends BaseController
                 session('isEdit',false);
                 return json([
                     'msg'=>'登录成功',
+                    'code'=>200,
                     'data'=>[
                         'url' => '/apidoc/index'
                     ]

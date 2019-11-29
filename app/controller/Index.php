@@ -32,7 +32,7 @@ class Index extends BaseController
      * @Param(value="name",doc="名称",rule={"require","number","alphaDash"})
      * @Param(value="age",doc="年纪",rule={"require","number"})
      * @Jwt()
-     * @Doc(value="测试jwt",group="jwt",hide="false")
+     * @Doc(value="测试jwt",group="鉴权.jwt",hide="false")
      */
     public function test()
     {
@@ -43,7 +43,7 @@ class Index extends BaseController
      * @Route(value="/create",method="POST")
      * @Validate(User::class,scene="add")
      * @Param(value="nickname",doc="昵称",rule={"require","alpha"})
-     * @Doc(value="创建jwt",group="jwt",hide="false")
+     * @Doc(value="创建jwt",group="鉴权.jwt",hide="false")
      */
     public function create()
     {

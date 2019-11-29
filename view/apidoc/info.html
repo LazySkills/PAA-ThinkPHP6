@@ -1,10 +1,12 @@
-{extend name="apidoc/layout/main" /}
-
-{block name="title"}
-主页
-{/block}
-
-{block name="content"}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>PAA 接口管理平台</title>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css"/>
+</head>
+<body>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-card">
@@ -14,7 +16,7 @@
                     <div class="layui-col-lg6">
                         <label class="layui-form-label">路由分组：</label>
                         <div class="layui-input-block">
-                            <code class="layui-input">{$info.group}</code>
+                            <code class="layui-input">{$info.group}.{$info.groupKey}</code>
                         </div>
                     </div>
                 </div>
@@ -118,6 +120,9 @@
         </div>
     </div>
 </div>
+</body>
+</html>
+
 <style>
     code{
         font-weight: bolder;
@@ -130,46 +135,17 @@
         border: none;
     }
 </style>
-{/block}
-
-{block name="js"}
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.min.js"></script>
 <script>
-    layui.config({
-        base: '/static/admin/layuiadmin/' //静态资源所在路径
-    }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function () {
-        var $ = layui.$
-            , admin = layui.admin
-            , element = layui.element
-            , form = layui.form;
-
-        form.render(null, 'component-form-element');
-        element.render('breadcrumb', 'breadcrumb');
-
-        form.on('submit(component-form-element)', function (data) {
-            $.post(data.form.action, data.field, function (res) {
-                // console.log(res)
-            })
-                .success(function (res) {
-                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                    layer.msg(res.msg, {
-                        offset: '15px'
-                        , icon: 1
-                        , time: 2000
-                    }, function () {
-                        // history.go();
-                        parent.location = document.referrer;
-                        parent.layer.close(index); //再执行关闭
-                    });
-                })
-                .error(function (res) {
-                    layer.msg(res.responseJSON.msg, {offset: '15px', icon: 2, time: 1000});
-                });
-            return false;
-        });
+    //页面加载json格式化
+    $(function () {
+        $(".layui-code").each(function (i) {
+            console.log($(this))
+            var json = $(this).html();
+            if (json != '' && json != 'undefined'){
+                $(this).JSONView(json);
+            }
+        })
     });
 </script>
-
-
-{/block}
