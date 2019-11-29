@@ -3,7 +3,6 @@ declare (strict_types = 1);
 
 namespace app\annotation\handler;
 
-use app\validate\BaseValidate;
 use Doctrine\Common\Annotations\Annotation;
 use think\annotation\handler\Handler;
 use think\Validate;
