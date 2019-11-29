@@ -29,11 +29,18 @@
         background-color: #20222A;
         color: #fff;
     }
+    .layui-nav-child > dd{
+        background-color: #20222A;
+        color: #fff;
+    }
+    .layui-nav *{
+        font-size: 15px;
+    }
 </style>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">PAA 接口管理平台</div>
+        <div class="layui-logo" style="color: rgba(255,255,255,.8);">PAA 接口管理平台</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item">
@@ -68,31 +75,64 @@
                         <cite>欢迎页</cite>
                     </a>
                 </li>
-                {foreach $menus as $group => $items}
-                <li data-name="{$group|default='通用'}" class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;" lay-tips="{$group|default='通用'}" lay-direction="2">
+                {foreach $menus as $firstKey => $first}
+                <li data-name="{$firstKey|default='通用'}" class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;" lay-tips="{$firstKey|default='通用'}" lay-direction="2">
                         <i class="layui-icon layui-icon-app"></i>
-                        <cite>{$group|default='通用'}</cite>
+                        <cite>&nbsp;{$firstKey|default='通用'}</cite>
                     </a>
-                    {foreach $items as $doc => $item}
+                    {foreach $first as $twoKey =>  $two}
                     <dl class="layui-nav-child">
-                        <dd data-name="{$doc}">
-                            <a href="javascript:;">
-                                <i class="layui-icon layui-icon-template"></i>
-                                <cite>{$doc}</cite>
+                        <dd data-name="{$twoKey}" >
+                            <a href="javascript:;" style="text-align: left;margin-left: 10px;font-size: 22px">
+                                <i class="layui-icon layui-icon-spread-left"></i>
+                                <cite>&nbsp;{$twoKey}</cite>
                             </a>
-                            <dl class="layui-nav-child">
-                                {eq name="isEdit" value="true"}
-                                <dd style="text-align: right;font-size: 18px">
-                                    <a lay-href="/apidoc/edit?action={$doc}&group={$group}">
-                                        <cite> 编辑【{$doc}】 ✏️</cite>
-                                    </a>
-                                </dd>
-                                {/eq}
-                                <dd style="text-align: right;font-size: 18px"><a lay-href="/apidoc/info?action={$doc}&group={$group}">
-                                    <cite > 详情【{$doc}】 🔎</cite>
-                                </a></dd>
-                            </dl>
+                            {if is_array(array_pop($two)) }
+                                {foreach $two as $threeKey =>  $three}
+                                <dl class="layui-nav-child">
+                                    <dd data-name="{$threeKey}" >
+                                        <a href="javascript:;" style="text-align: left;margin-left: 25px;font-size: 22px">
+                                            <i class="layui-icon layui-icon-spread-left"></i>
+                                            <cite>&nbsp;{$threeKey}</cite>
+                                        </a>
+                                        <dl class="layui-nav-child">
+                                            {eq name="isEdit" value="true"}
+                                            <dd style="text-align: center;font-size: 18px">
+                                                <a lay-href="/apidoc/edit?action={$threeKey}&groupKey={$twoKey}&group={$firstKey}">
+                                                    <i class="layui-icon layui-icon-edit"></i>
+                                                    <cite>&nbsp;编辑️</cite>
+                                                </a>
+                                            </dd>
+                                            {/eq}
+                                            <dd style="text-align: center;font-size: 18px">
+                                                <a lay-href="/apidoc/info?action={$threeKey}&groupKey={$twoKey}&group={$firstKey}">
+                                                    <i class="layui-icon layui-icon-read"></i>
+                                                    <cite>&nbsp;详情</cite>
+                                                </a>
+                                            </dd>
+                                        </dl>
+                                    </dd>
+                                </dl>
+                                {/foreach}
+                            {else /}
+                                <dl class="layui-nav-child">
+                                    {eq name="isEdit" value="true"}
+                                    <dd style="text-align: center;font-size: 18px">
+                                        <a lay-href="/apidoc/edit?action={$twoKey}&groupKey=''&group={$firstKey}">
+                                            <i class="layui-icon layui-icon-edit"></i>
+                                            <cite>&nbsp;编辑️</cite>
+                                        </a>
+                                    </dd>
+                                    {/eq}
+                                    <dd style="text-align: center;font-size: 18px">
+                                        <a lay-href="/apidoc/info?action={$twoKey}&groupKey=''&group={$firstKey}">
+                                            <i class="layui-icon layui-icon-read"></i>
+                                            <cite>&nbsp;详情</cite>
+                                        </a>
+                                    </dd>
+                                </dl>
+                            {/if}
                         </dd>
                     </dl>
                     {/foreach}
@@ -111,7 +151,7 @@
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->
-        © PAA 接口管理平台 - 底部固定区域
+        © PAA 接口管理平台 - <a href="https://github.com/LazySkills/PAA-thinkphp6" alt="PAA-ThinkPHP6">PAA-ThinkPHP6</a>
     </div>
 </div>
 </body>
