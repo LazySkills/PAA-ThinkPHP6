@@ -45,7 +45,7 @@ http://127.0.0.1:8000/
 浏览器访问地址
 
 ```bash
-http://127.0.0.1:8000/apidoc/
+http://127.0.0.1:8000/paa/index
 ```
 
 ### 账户
@@ -62,14 +62,8 @@ http://127.0.0.1:8000/apidoc/
 
 ### 暂时演示地址：
 
-- 欢迎页：
-    ```
-      http://m.ibs3.top:8080/
-    ```
-- 接口管理：
-    ```
-      http://m.ibs3.top:8080/apidoc
-    ```
+- 欢迎页 [点我，我超帅](http://paa.tp6.devilgod.cn)
+- 接口管理：[点我，我超美](http://paa.tp6.devilgod.cn/paa/index)
     
 ## 感谢
 

@@ -10,6 +10,7 @@ return [
         'controllers' => [],
     ],
     'ignore' => [],
+    'management' => true,
     'custom' => [
         # 格式：注解类 => 注解操作类
 //        \app\annotation\Param::class => \app\annotation\handler\Param::class,
