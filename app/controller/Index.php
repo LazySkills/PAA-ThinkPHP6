@@ -2,10 +2,10 @@
 
 namespace app\controller;
 
-use app\annotation\Doc;
-use app\annotation\Jwt;
-use app\annotation\Param;
 use app\BaseController;
+use think\annotation\route\Doc;
+use think\annotation\route\Jwt;
+use think\annotation\route\Param;
 use think\annotation\route\Route;
 use think\annotation\route\Validate;
 use app\validate\User;

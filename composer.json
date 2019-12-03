@@ -19,7 +19,7 @@
         "php": ">=7.1.0",
         "topthink/framework": "^6.0.0",
         "topthink/think-orm": "^2.0",
-        "lazyskills/think-annotation": "^1.0.2",
+        "lazyskills/think-annotation": "dev-master",
         "firebase/php-jwt": "^5.0",
         "topthink/think-view": "^1.0.5"
     },
