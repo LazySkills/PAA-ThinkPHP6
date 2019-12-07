@@ -4,7 +4,7 @@
 namespace app\exception;
 
 
-class AuthenticationException extends BaseException
+class AuthenticationException extends \Exception
 {
     protected $message = '鉴权错误🙅';
     protected $code = 400;

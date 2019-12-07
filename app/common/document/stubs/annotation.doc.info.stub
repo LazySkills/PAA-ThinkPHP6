@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>PAA 接口管理平台</title>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css"/>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-card">
+            <div class="layui-card-header">{$title}</div>
+            <div class="layui-card-body">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由分组1：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.group}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由分组2：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.groupKey}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由名称：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.action}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由规则：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.rule}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">请求方法：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.method}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">路由类路：</label>
+                        <div class="layui-input-block">
+                            <code class="layui-input">{$info.route}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">参数验证：</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table">
+                                <thead>
+                                    <tr>
+                                        <th>参数名称</th>
+                                        <th>参数注解</th>
+                                        <th>参数规则</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="info.validate" id="vo"}
+                                    <tr>
+                                        <td>{$vo.name}</td>
+                                        <td>{$vo.doc}</td>
+                                        <td>{$vo.rule}</td>
+                                    </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">正确返回：</label>
+                        <div class="layui-input-block">
+                            <pre class="layui-code" lay-title="" lay-height="" lay-skin="" lay-encode="">{$info.success|default=''}</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">错误返回：</label>
+                        <div class="layui-input-block">
+                            <pre class="layui-code" lay-title="" lay-height="" lay-skin="" lay-encode="">{$info.error|default=''}</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg6">
+                        <label class="layui-form-label">返回参数：</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" id="return_params">
+                                <thead>
+                                <tr>
+                                    <th>参数名称</th>
+                                    <th>参数注解</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {foreach $info.return_params as $key=>$vo}
+                                <tr>
+                                    <td>{$key}</td>
+                                    <td>{$vo}</td>
+                                </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<style>
+    code{
+        font-weight: bolder;
+        font-size: 20px;
+        line-height: 50px;
+        background-color: #f1f1f1;
+        padding: 5px;
+    }
+    .layui-input{
+        border: none;
+    }
+</style>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.min.js"></script>
+<script>
+    //页面加载json格式化
+    $(function () {
+        $(".layui-code").each(function (i) {
+            console.log($(this))
+            var json = $(this).html();
+            if (json != '' && json != 'undefined'){
+                $(this).JSONView(json);
+            }
+        })
+    });
+</script>
