@@ -1,4 +1,5 @@
 <?php
+
 namespace app;
 
 use think\db\exception\DataNotFoundException;
@@ -31,7 +32,7 @@ class ExceptionHandle extends Handle
      * 记录异常信息（包括日志或者其它方式记录）
      *
      * @access public
-     * @param  Throwable $exception
+     * @param Throwable $exception
      * @return void
      */
     public function report(Throwable $exception): void
@@ -44,27 +45,34 @@ class ExceptionHandle extends Handle
      * Render an exception into an HTTP response.
      *
      * @access public
-     * @param \think\Request   $request
+     * @param \think\Request $request
      * @param Throwable $e
      * @return Response
      */
     public function render($request, Throwable $e): Response
     {
-        dump($e);die;
+        $this->report($e);
+
         // 开启debug开启时，走系统错误
-        if (env('APP_DEBUG')){
+        if (true) {
             // 其他错误交给系统处理
             return parent::render($request, $e);
         }
 
+        $errorCode = function () {
+            return $this->error_code ?? 1000;
+        };
+
         // 添加自定义异常处理机制
-        return \response([
-            'msg' => $e->getMessage() ?? '服務器內部錯誤，不想告訴你',
-            'error_code' => method_exists($e,'getErrorCode') ? $e->getErrorCode() : 999,
-            'request_url' => $request->method(). ' ' .$request->url()
-        ],
+        return \response(
+            [
+                'msg' => $e->getMessage() ?? '服務器內部錯誤，不想告訴你',
+                'error_code' =>  $errorCode->call($e) ?? 1000,
+                'request_url' => $request->method() . ' ' . $request->url()
+            ],
             $e->getCode() ?? 500,
             [],
-            'json');
+            'json'
+        );
     }
 }

@@ -3,15 +3,18 @@
 namespace app\controller;
 
 use app\BaseController;
-use think\annotation\route\Doc;
-use think\annotation\route\Jwt;
-use think\annotation\route\Param;
+use app\exception\AuthenticationException;
+use think\annotation\route\Group;
+use app\annotation\Doc;
+use app\annotation\Jwt;
+use app\annotation\Param;
 use think\annotation\route\Route;
 use think\annotation\route\Validate;
 use app\validate\User;
 
 /**
  * Class Index
+ * @Group("index")
  * @package app\controller
  */
 class Index extends BaseController
@@ -28,7 +31,7 @@ class Index extends BaseController
     }
 
     /**
-     * @Route(value="/test",method="GET")
+     * @Route(value="test",method="GET")
      * @Param(value="name",doc="名称",rule={"require","number","alphaDash"})
      * @Param(value="age",doc="年纪",rule={"require","number"})
      * @Jwt()
@@ -40,23 +43,22 @@ class Index extends BaseController
     }
 
     /**
-     * @Route(value="/create",method="POST")
+     * @Route(value="create",method="POST")
      * @Validate(User::class,scene="add")
      * @Param(value="nickname",doc="昵称",rule={"require","alpha"})
      * @Doc(value="创建jwt",group="鉴权.jwt",hide="false")
      */
     public function create()
     {
-        $key = input('nickname');
-        return json((new \app\common\authentication\Jwt())->encode($key,md5($key)));
+        throw new AuthenticationException('创建jwt');
     }
 
     /**
-     * @Route(value="/cs",method="POST")
+     * @Route(value="cs",method="get")
      * @Param(value="nickname",doc="昵称",rule={"require","alpha"})
      * @Doc(value="获取jwt列表",hide="false")
      */
     public function list(){
-
+        throw new AuthenticationException('你妹妹的猪猪跑了');
     }
 }

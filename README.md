@@ -13,6 +13,22 @@
 - 接口JWT注解器，`app/annotation/JWT.php`
 - 接口管理平台
 
+## 安装
+
+`PAA-ThinkPHP6` 依赖于[composer](https://china-wangyu.github.io/views/php/composer/)
+
+所以，安装composer依赖扩展
+
+```bash
+composer install
+```
+
+嫌弃太慢，建议使用国内源
+
+```bash
+composer config repo.packagist composer https://mirrors.aliyun.com/composer/
+```
+
 
 ## 运行
 

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+</head>
+<style type="text/css">
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    div {
+        padding: 4px 48px;
+    }
+
+    a {
+        color: #2E5CD5;
+        cursor: pointer;
+        text-decoration: none
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    body {
+        font-family: \"Century Gothic\", \"Microsoft yahei\";
+        font-size: 18px;
+        color: #333;
+    }
+
+    h1 {
+        font-size: 100px;
+        font-weight: normal;
+        margin-bottom: 12px;
+    }
+
+    p {
+        line-height: 1.6em;
+        font-size: 42px
+    }
+    code{
+        background-color: #888;
+        border-radius: 5px;
+        padding: 2px;
+        font-weight: bolder;
+    }
+</style>
+<body>
+<div style="padding: 24px 48px;">
+    <h1>:) </h1>
+    <h1 style='font-size: 45px'>
+        源于
+        <a href="https://github.com/LazySkills/PAA-thinkphp6">PAA</a>
+        的美好生活💑
+    </h1>
+    <p>语言：<code>PHP(>=7.1)</code></p>
+    <p>框架：<code>ThinkPHP(>=V6.0)</code></p>
+    <p>
+        <span style="font-size:30px">初心不改 - 🥰幸福感满满的PHP框架</span>
+    </p>
+</div>
+</body>
+</html>
