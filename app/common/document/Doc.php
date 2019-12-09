@@ -138,13 +138,8 @@ final class Doc
     {
         if (!empty($this->router->getRule('paa/info'))) return;
         $this->router->get('paa/info', function () {
-            $jwt = $this->checkUserLogin();
             $params = request()->get();
-            $apiInfo = $this->getUserAnnotationJson(
-                $params['action'],
-                $params['group'],
-                $params['groupKey']
-            );
+            $apiInfo = $this->getUserAnnotationJson($params['rule']);
             $apiInfo['validate'] = $apiInfo['validate'][0];
             foreach ($apiInfo['validate'] as $key => $item) {
                 $validateName = explode('|', $key);
@@ -154,9 +149,6 @@ final class Doc
                     'rule' => $item
                 ];
             }
-            $apiInfo['action'] = $params['action'];
-            $apiInfo['group'] = $params['group'];
-            $apiInfo['groupKey'] = $params['groupKey'];
             $apiInfo['success'] = json_encode($apiInfo['success']);
             $apiInfo['error'] = json_encode($apiInfo['error']);
             return View::display(
@@ -176,11 +168,7 @@ final class Doc
                 throw new \Exception('你没有编辑权限');
             }
             $params = request()->get();
-            $apiInfo = $this->getUserAnnotationJson(
-                $params['action'],
-                $params['group'],
-                $params['groupKey'],
-                );
+            $apiInfo = $this->getUserAnnotationJson($params['rule']);
             $apiInfo['validate'] = $apiInfo['validate'][0];
             foreach ($apiInfo['validate'] as $key => $item) {
                 $validateName = explode('|', $key);
@@ -190,14 +178,12 @@ final class Doc
                     'rule' => $item
                 ];
             }
-            $apiInfo['action'] = $params['action'];
-            $apiInfo['group'] = $params['group'];
-            $apiInfo['groupKey'] = $params['groupKey'];
+            $token = $params['token'];
             $apiInfo['success'] = json_encode($apiInfo['success']);
             $apiInfo['error'] = json_encode($apiInfo['error']);
             return View::display(
                 file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'annotation.doc.edit.stub'),
-                ['info' => $apiInfo, 'title' => '编辑API接口', 'isEdit' => Session::get('isEdit')]
+                ['info' => $apiInfo,'token'=>$token, 'title' => '编辑API接口', 'isEdit' => Session::get('isEdit')]
             );
         });
     }
@@ -209,6 +195,7 @@ final class Doc
         $this->router->post('paa/edit/save', function () {
             if (request()->isPost()) {
                 $params = input();
+                $jwt = $this->checkUserLogin();
                 $return_params = [];
                 if (isset($params['return_params']['name']) and !empty($params['return_params']['name'])) {
                     foreach ($params['return_params']['name'] as $key => $value) {
@@ -220,20 +207,11 @@ final class Doc
                 if (is_null($error) or is_null($success)) {
                     throw new \Exception('返回值格式为：Json');
                 }
-                $apiInfo = $this->getUserAnnotationJson(
-                    $params['action'],
-                    $params['group'],
-                    $params['groupKey']
-                );
+                $apiInfo = $this->getUserAnnotationJson($params['rule']);
                 $apiInfo['success'] = $success;
                 $apiInfo['error'] = $error;
                 $apiInfo['return_params'] = $return_params;
-                $this->setUserAnnotationJson(
-                    $params['action'],
-                    $apiInfo,
-                    $params['group'],
-                    $params['groupKey']
-                );
+                $this->setUserAnnotationJson($params['rule'],$apiInfo);
                 return json([
                     'msg' => '操作成功',
                     'code' => 200,
@@ -260,7 +238,7 @@ final class Doc
         if (!empty($this->router->getRule('paa/refresh'))) return;
         $this->router->get('paa/refresh', function () {
             foreach ($this->annotation as $key => $item) {
-                if (empty($this->router->getRule($item['rule']))) {
+                if (empty($this->router->getRule($key))) {
                     unset($this->annotation[$key]);
                 }
             }
@@ -294,10 +272,9 @@ final class Doc
     /**
      * 设置用户注释json文件
      */
-    public function setUserAnnotationJson(string $rule, array $docs = [], string $group = '', string $groupKey = '')
+    public function setUserAnnotationJson(string $rule, array $docs = [])
     {
-        $group = empty($groupKey) ? $group : $group . '.' . $groupKey;
-        $this->annotation[empty($group) ? $rule : $group . '.' . $rule] = $docs;
+        $this->annotation[$rule] = $docs;
         $res = file_put_contents(
             root_path() . $this->path,
             json_encode($this->annotation, JSON_UNESCAPED_UNICODE),
@@ -307,10 +284,9 @@ final class Doc
     }
 
     /** 获取用户注解json文件 */
-    public function getUserAnnotationJson(string $rule, string $group = '', string $groupKey = '')
+    public function getUserAnnotationJson(string $rule)
     {
-        $group = empty($groupKey) ? $group : $group . '.' . $groupKey;
-        return $this->annotation[empty($group) ? $rule : $group . '.' . $rule] ?? [];
+        return $this->annotation[$rule] ?? [];
     }
 
     /** 获取注解json文件 */
@@ -335,22 +311,16 @@ final class Doc
     public function initializeAnnotationJson(Annotation $annotation): void
     {
         $data = $this->getApiAnnotationJson();
+        $ruleData = $this->getRuleData(
+            $data[$this->rule->getRule()] ?? [],
+            $this->rule
+        );
         if (empty($annotation->value)) {
             return;
         }
-        if (empty($annotation->group)) {
-            $data[$annotation->value] = $this->getRuleData(
-                $data[$annotation->value] ?? [],
-                $this->rule
-            );
-            $data[$annotation->value]['hide'] = $annotation->hide == 'false' ? false : true;
-        } else {
-            $data[$annotation->group . '.' . $annotation->value] = $this->getRuleData(
-                $data[$annotation->group . '.' . $annotation->value] ?? [],
-                $this->rule
-            );
-            $data[$annotation->group . '.' . $annotation->value]['hide'] = $annotation->hide == 'false' ? false : true;
-        }
+        $ruleData['doc'] = empty($annotation->group) ? $annotation->value: $annotation->group . '.' . $annotation->value;
+        $ruleData['hide'] = $annotation->hide == 'false' ? false : true;
+        $data[$this->rule->getRule()] = $ruleData;
         $this->setApiAnnotationJson($data);
     }
 
@@ -373,14 +343,14 @@ final class Doc
     {
         $annotations = [];
         foreach ($this->annotation as $key => $item) {
-            $annotations = $this->getRuleItem($key, $item, $annotations);
+            $annotations = $this->getRuleItem($item, $annotations);
         }
         return $annotations;
     }
 
-    public function getRuleItem(string $rule, array $item = [], array $annotations = [])
+    public function getRuleItem( array $item = [], array $annotations = [])
     {
-        $ruleArr = explode('.', trim($rule, '.'));
+        $ruleArr = explode('.', trim($item['doc'], '.'));
         switch (count($ruleArr)) {
             case 3:
                 $annotations[$ruleArr[0]][$ruleArr[1]][$ruleArr[2]] = $item;

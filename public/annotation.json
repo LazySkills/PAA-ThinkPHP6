@@ -1,1 +1,59 @@
-{"管理.app.测试":{"rule":"app\/test","route":"app\\controller\\App@test","method":"get","validate":[{"age|年纪":"require|number","name|名称":"require|number|alphaDash"},null,[],false],"success":[],"error":[],"return_params":{"sadas":"asdasdasdas"},"hide":false},"管理.app.创建jwt":{"rule":"app\/create","route":"app\\controller\\App@create","method":"post","validate":[{"nickname|昵称":"require|alpha","sex":"require|in:1,2","px":"require|in:500,999"},null,[],false],"success":[],"error":[],"return_params":[],"hide":false},"鉴权.jwt.测试jwt":{"rule":"index\/test","route":"app\\controller\\Index@test","method":"get","validate":[{"age|年纪":"require|number","name|名称":"require|number|alphaDash"},null,[],false],"success":[],"error":[],"return_params":[],"hide":false},"鉴权.jwt.创建jwt":{"rule":"index\/create","route":"app\\controller\\Index@create","method":"post","validate":[{"nickname|昵称":"require|alpha","sex":"require|in:1,2","px":"require|in:500,999"},null,[],false],"success":[],"error":[],"return_params":[],"hide":false},"获取jwt列表":{"rule":"index\/cs","route":"app\\controller\\Index@list","method":"get","validate":[{"nickname|昵称":"require|alpha"},null,[],false],"success":[],"error":[],"return_params":[],"hide":false}}
+{
+  "app\/test": {
+    "rule": "app\/test",
+    "route": "app\\controller\\App@test",
+    "method": "get",
+    "validate": [
+      {
+        "age|年纪": "require|number",
+        "name|名称": "require|number|alphaDash"
+      },
+      null,
+      [],
+      false
+    ],
+    "success": [],
+    "error": [],
+    "return_params": [],
+    "doc": "管理.应用.测试应用",
+    "hide": false
+  },
+  "index\/test": {
+    "rule": "index\/test",
+    "route": "app\\controller\\Index@test",
+    "method": "get",
+    "validate": [
+      {
+        "age|年纪": "require|number",
+        "name|名称": "require|number|alphaDash"
+      },
+      null,
+      [],
+      false
+    ],
+    "success": [],
+    "error": [],
+    "return_params": [],
+    "doc": "推荐.推荐测试",
+    "hide": false
+  },
+  "index\/miss": {
+    "rule": "index\/miss",
+    "route": "app\\controller\\Index@miss",
+    "method": "get",
+    "validate": [
+      {
+        "age|年纪": "require|number",
+        "name|名称": "require|number|alphaDash"
+      },
+      null,
+      [],
+      false
+    ],
+    "success": [],
+    "error": [],
+    "return_params": [],
+    "doc": "缓存",
+    "hide": false
+  }
+}

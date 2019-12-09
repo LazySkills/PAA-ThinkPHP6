@@ -35,7 +35,7 @@ class Index extends BaseController
      * @Param(value="name",doc="名称",rule={"require","number","alphaDash"})
      * @Param(value="age",doc="年纪",rule={"require","number"})
      * @Jwt()
-     * @Doc(value="测试jwt",group="鉴权.jwt",hide="false")
+     * @Doc(value="推荐测试",group="推荐",hide="false")
      */
     public function test()
     {
@@ -43,22 +43,14 @@ class Index extends BaseController
     }
 
     /**
-     * @Route(value="create",method="POST")
-     * @Validate(User::class,scene="add")
-     * @Param(value="nickname",doc="昵称",rule={"require","alpha"})
-     * @Doc(value="创建jwt",group="鉴权.jwt",hide="false")
+     * @Route(value="miss",method="GET")
+     * @Param(value="name",doc="名称",rule={"require","number","alphaDash"})
+     * @Param(value="age",doc="年纪",rule={"require","number"})
+     * @Jwt()
+     * @Doc(value="缓存",hide="false")
      */
-    public function create()
+    public function miss()
     {
-        throw new AuthenticationException('创建jwt');
-    }
-
-    /**
-     * @Route(value="cs",method="get")
-     * @Param(value="nickname",doc="昵称",rule={"require","alpha"})
-     * @Doc(value="获取jwt列表",hide="false")
-     */
-    public function list(){
-        throw new AuthenticationException('你妹妹的猪猪跑了');
+        return 'PAA';
     }
 }
