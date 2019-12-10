@@ -1,12 +1,6 @@
 FROM php:7.4.0-fpm
 
-# Install PHP oniguruma
-RUN git clone https://github.com/kkos/oniguruma.git \
-    cd oniguruma \
-    autoreconf -vfi \
-    ./configure \
-    make \
-    make install\
+
 
 
 # 设置国内源
@@ -24,22 +18,30 @@ RUN apt-get update \
         libjpeg-dev \
         libpng-dev \
         libfreetype6-dev \
-
+        libzip-dev \
+#        oniguruma-devel \
+#        libonig-dev \
+#        build-essential \
+#        nano \
+#        net-tools \
+#        autoconf \
+#        gem \
+## Install PHP onigurumas
+#    && gem install oniguruma \
 # Install PHP extensions
     && docker-php-ext-install \
-       bcmath gd pdo_mysql mbstring sockets zip sysvmsg sysvsem sysvshm \
+       bcmath gd pdo_mysql \
+#       mbstring \
+       sockets zip sysvmsg sysvsem sysvshm \
 
 # Install composer
-     curl -sS https://getcomposer.org/installer | php \
+    && curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update --clean-backups \
 # Clear dev deps
     && apt-get clean \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-# Timezone
-    && cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
-    && echo "${TIMEZONE}" > /etc/timezone \
-    && echo "[Date]\ndate.timezone=${TIMEZONE}" > /usr/local/etc/php/conf.d/timezone.ini
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+ADD . /app/paa_thinkphp6
 
 RUN  cd /app/paa_thinkphp6 \
     && composer install \

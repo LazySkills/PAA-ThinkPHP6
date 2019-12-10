@@ -1,12 +1,12 @@
 version: "3.7"
 services:
   php:
-    build: ./.docker-compose/php
+    build: .
     container_name: "paa_thinkphp6"
     ports:
       - "19000:9000"
     volumes:
-      - "./:/app/paa_thinkphp6"
+      - ./:/app/paa_thinkphp6
     environment:
       - APP_DEBUG=true
 
@@ -17,8 +17,10 @@ services:
       - "19001:80"
     links:
       - php
+    privileged: true
     volumes:
-      - "./:/app/paa_thinkphp6"
-      - ./.docker-compose/nginx:/etc/nginx/conf.d
+      - ./:/app/paa_thinkphp6
+      - ./runtime/nginx:/etc/nginx/conf.d
+      - ./runtime/nginx/log:/var/log/nginx
     depends_on:
       - "php"

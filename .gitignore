@@ -3,4 +3,8 @@
 /vendor
 *.log
 # .env
-/runtime
+/runtime/cache
+/runtime/log
+/runtime/temp
+/runtime/nginx/log
+composer.lock
