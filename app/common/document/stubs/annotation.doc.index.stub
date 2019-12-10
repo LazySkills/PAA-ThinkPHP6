@@ -107,14 +107,14 @@
                                         <dl class="layui-nav-child">
                                             {eq name="isEdit" value="1"}
                                             <dd style="text-align: center;font-size: 18px">
-                                                <a lay-href="/paa/edit?action={$threeKey}&groupKey={$twoKey}&group={$firstKey}&token={$token}">
+                                                <a lay-href="/paa/edit?rule={$three.rule}&token={$token}">
                                                     <i class="layui-icon layui-icon-edit"></i>
                                                     <cite>&nbsp;编辑️</cite>
                                                 </a>
                                             </dd>
                                             {/eq}
                                             <dd style="text-align: center;font-size: 18px">
-                                                <a lay-href="/paa/info?action={$threeKey}&groupKey={$twoKey}&group={$firstKey}&token={$token}">
+                                                <a lay-href="/paa/info?rule={$three.rule}&token={$token}">
                                                     <i class="layui-icon layui-icon-read"></i>
                                                     <cite>&nbsp;详情</cite>
                                                 </a>
@@ -127,14 +127,14 @@
                                 <dl class="layui-nav-child">
                                     {eq name="isEdit" value="1"}
                                     <dd style="text-align: center;font-size: 18px">
-                                        <a lay-href="/paa/edit?action={$twoKey}&groupKey=''&group={$firstKey}&token={$token}">
+                                        <a lay-href="/paa/edit?rule={$two.rule}&token={$token}">
                                             <i class="layui-icon layui-icon-edit"></i>
                                             <cite>&nbsp;编辑️</cite>
                                         </a>
                                     </dd>
                                     {/eq}
                                     <dd style="text-align: center;font-size: 18px">
-                                        <a lay-href="/paa/info?action={$twoKey}&groupKey=''&group={$firstKey}&token={$token}">
+                                        <a lay-href="/paa/info?rule={$two.rule}&token={$token}">
                                             <i class="layui-icon layui-icon-read"></i>
                                             <cite>&nbsp;详情</cite>
                                         </a>
@@ -148,14 +148,14 @@
                         <dl class="layui-nav-child">
                             {eq name="isEdit" value="1"}
                             <dd style="text-align: center;font-size: 18px">
-                                <a lay-href="/paa/edit?action={$firstKey}&groupKey=&group=&token={$token}">
+                                <a lay-href="/paa/edit?rule={$first.rule}&token={$token}">
                                     <i class="layui-icon layui-icon-edit"></i>
                                     <cite>&nbsp;编辑️</cite>
                                 </a>
                             </dd>
                             {/eq}
                             <dd style="text-align: center;font-size: 18px">
-                                <a lay-href="/paa/info?action={$firstKey}&groupKey=&group=&token={$token}">
+                                <a lay-href="/paa/info?rule={$first.rule}&token={$token}">
                                     <i class="layui-icon layui-icon-read"></i>
                                     <cite>&nbsp;详情</cite>
                                 </a>

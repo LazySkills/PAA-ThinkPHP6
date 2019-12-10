@@ -54,7 +54,7 @@ class ExceptionHandle extends Handle
         $this->report($e);
 
         // 开启debug开启时，走系统错误
-        if (true) {
+        if (env('APP_DEBUG')) {
             // 其他错误交给系统处理
             return parent::render($request, $e);
         }

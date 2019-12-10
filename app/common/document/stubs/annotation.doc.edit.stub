@@ -12,29 +12,13 @@
         <div class="layui-card">
             <div class="layui-card-header">{$title}</div>
             <div class="layui-card-body">
-                <form class="layui-form" action="/paa/edit/save?action={$info.action}&group={$info.group}&groupKey={$info.groupKey}" method="post"
+                <form class="layui-form" action="/paa/edit/save?rule={$info.rule}&token={$token}" method="post"
                       lay-filter="component-form-element">
                     <div class="layui-row layui-col-space10 layui-form-item">
                         <div class="layui-col-lg6">
-                            <label class="layui-form-label">路由分组1：</label>
+                            <label class="layui-form-label">接口名称：</label>
                             <div class="layui-input-block">
-                                <code class="layui-input">{$info.group}</code>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-row layui-col-space10 layui-form-item">
-                        <div class="layui-col-lg6">
-                            <label class="layui-form-label">路由分组2：</label>
-                            <div class="layui-input-block">
-                                <code class="layui-input">{$info.groupKey}</code>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-row layui-col-space10 layui-form-item">
-                        <div class="layui-col-lg6">
-                            <label class="layui-form-label">路由名称：</label>
-                            <div class="layui-input-block">
-                                <code class="layui-input">{$info.action}</code>
+                                <code class="layui-input">{$info.doc}</code>
                             </div>
                         </div>
                     </div>
