@@ -13,6 +13,7 @@ services:
   nginx:
     image: "nginx:1.17"
     container_name: "paa_nginx1.17"
+    hostname: chinawangyu.cn
     ports:
       - "19001:80"
     links:
