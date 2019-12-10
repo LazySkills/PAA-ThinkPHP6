@@ -1,8 +1,5 @@
 FROM php:7.4.0-fpm
 
-
-
-
 # 设置国内源
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.back && \
      echo '# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释 \n \
@@ -19,19 +16,8 @@ RUN apt-get update \
         libpng-dev \
         libfreetype6-dev \
         libzip-dev \
-#        oniguruma-devel \
-#        libonig-dev \
-#        build-essential \
-#        nano \
-#        net-tools \
-#        autoconf \
-#        gem \
-## Install PHP onigurumas
-#    && gem install oniguruma \
-# Install PHP extensions
     && docker-php-ext-install \
        bcmath gd pdo_mysql \
-#       mbstring \
        sockets zip sysvmsg sysvsem sysvshm \
 
 # Install composer
@@ -48,3 +34,7 @@ RUN  cd /app/paa_thinkphp6 \
     && composer clearcache
 
 WORKDIR /app/paa_thinkphp6
+
+EXPOSE 8000 9000
+
+CMD ["php", "/app/paa_thinkphp6/think", "run"]

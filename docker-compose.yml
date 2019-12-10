@@ -1,10 +1,11 @@
 version: "3.7"
 services:
   php:
-    build: .
-    container_name: "paa_thinkphp6"
+    image: chinawangyu/paa-thinkphp6
+    container_name: "paa-php"
     ports:
-      - "19000:9000"
+      - "19001:8000"
+      - "19002:9000"
     volumes:
       - ./:/app/paa_thinkphp6
     environment:
@@ -12,13 +13,11 @@ services:
 
   nginx:
     image: "nginx:1.17"
-    container_name: "paa_nginx1.17"
-    hostname: chinawangyu.cn
+    container_name: "paa-web"
     ports:
-      - "19001:80"
+      - "19000:80"
     links:
       - php
-    privileged: true
     volumes:
       - ./:/app/paa_thinkphp6
       - ./runtime/nginx:/etc/nginx/conf.d
