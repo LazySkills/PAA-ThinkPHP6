@@ -27,6 +27,7 @@ RUN apt-get update \
 # Clear dev deps
     && apt-get clean \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+
 ADD . /app/paa_thinkphp6
 
 RUN  cd /app/paa_thinkphp6 \
@@ -35,6 +36,6 @@ RUN  cd /app/paa_thinkphp6 \
 
 WORKDIR /app/paa_thinkphp6
 
-EXPOSE 8000 9000
+EXPOSE 9000
 
-CMD ["php", "/app/paa_thinkphp6/think", "run"]
+CMD ["php", "/app/paa_thinkphp6/think", "run","-p 9000"]

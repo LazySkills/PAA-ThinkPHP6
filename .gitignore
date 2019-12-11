@@ -7,4 +7,5 @@
 /runtime/log
 /runtime/temp
 /runtime/nginx/log
+/runtime/*.php
 composer.lock

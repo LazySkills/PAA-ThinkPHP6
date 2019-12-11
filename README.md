@@ -13,7 +13,19 @@
 - 接口JWT注解器，`app/annotation/JWT.php`
 - 接口管理平台
 
-## 安装
+## 安装源码
+
+`PAA-ThinkPHP6` 源码放于[github](https://github.com/LazySkills/PAA-thinkphp6)
+
+所以，需要使用`git`安装
+
+```bash
+git clone https://github.com/LazySkills/PAA-thinkphp6.git
+```
+
+> **以下步骤需要先进入项目目录**
+
+## 安装扩展
 
 `PAA-ThinkPHP6` 依赖于[composer](https://china-wangyu.github.io/views/php/composer/)
 
@@ -32,29 +44,68 @@ composer config repo.packagist composer https://mirrors.aliyun.com/composer/
 
 ## 运行
 
-开发运行，推荐使用`tinkphp6`内置服务器.
+- `ThinkPHP6`内置服务器
 
-命令：
+    开发运行，可以使用`tinkphp6`内置服务器.
+    
+    命令：
+    
+    ```php
+    php think run
+    ```
+    
+    运行效果
+    
+    ```bash
+    > php think run
+    
+    ThinkPHP Development server is started On <http://127.0.0.1:8000/>
+    You can exit with `CTRL-C`
+    Document root is: PAA-thinkphp6\public
+    ```
+    
+    运行成功，浏览器访问
+    
+    ```bash
+    http://127.0.0.1:8000/
+    ```
+- `docker`（推荐） 
+    
+   开发生产运行，推荐使用 `docker`
+   
+   关于怎么安装使用，请自行百度，谢谢🙏
+   
+   运行方式：
+   
+   ```bash
+   docker run --name paa-tp6 -p 8000:9000 -v "$PWD":/app/paa-thinkphp6 chinawangyu/paa-thinkphp6
+   ```
+   
+   运行成功，浏览器访问
+       
+   ```bash
+   http://127.0.0.1:8000/
+   ```
 
-```php
-php think run
-```
+- `docker-composer`
 
-运行效果
-
-```bash
-> php think run
-
-ThinkPHP Development server is started On <http://127.0.0.1:8000/>
-You can exit with `CTRL-C`
-Document root is: PAA-thinkphp6\public
-```
-
-运行成功，浏览器访问
-
-```bash
-http://127.0.0.1:8000/
-```
+   采用`php7.4-fpm` + `nginx1.17`完成构建
+   
+   关于怎么安装使用，请自行百度，谢谢🙏
+    
+          
+   运行方式：
+  
+   ```bash
+   docker-compose up -d
+   ```
+  
+   运行成功，浏览器访问
+      
+   ```bash
+   http://127.0.0.1:8000/
+   ```
+      
 
 ## 接口管理平台
 
