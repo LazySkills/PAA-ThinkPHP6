@@ -1,21 +1,20 @@
 version: "3.7"
 services:
   php:
-    image: chinawangyu/paa-thinkphp6
+    image: php:7.4.0-fpm
     container_name: "paa-php"
-    ports:
-      - "19001:8000"
-      - "19002:9000"
     volumes:
       - ./:/app/paa_thinkphp6
     environment:
       - APP_DEBUG=true
+      - TZ=Asia/Shanghai
+    command: php-fpm
 
   nginx:
     image: "nginx:1.17"
     container_name: "paa-web"
     ports:
-      - "19000:80"
+      - "8000:80"
     links:
       - php
     volumes:
