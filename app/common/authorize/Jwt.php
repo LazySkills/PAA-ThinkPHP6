@@ -8,151 +8,98 @@ use Firebase\JWT\JWT as FirebaseJwt;
 
 class Jwt
 {
-    private $key = 'PAA-thinkphp6';
-    private $type = 'Bearer';
-    private $uniqueId = null;
-    private $signature = null;
-    
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
+    protected static $signature;
+    protected static $uniqueId;
+    protected static $data;
 
-    /**
-     * @param string $type
-     */
-    public function setType(string $type): void
+    public static function encode(string $uniqueId, string $signature)
     {
-        $this->type = $type;
-    }
-
-    /**
-     * @return null
-     */
-    public function getUniqueId()
-    {
-        return $this->uniqueId;
-    }
-
-    /**
-     * @param null $uniqueId
-     */
-    public function setUniqueId($uniqueId): void
-    {
-        $this->uniqueId = $uniqueId;
-    }
-
-    /**
-     * @return null
-     */
-    public function getSignature()
-    {
-        return $this->signature;
-    }
-
-    /**
-     * @param null $signature
-     */
-    public function setSignature($signature): void
-    {
-        $this->signature = $signature;
-    }
-
-    /**
-     * @param string $key
-     */
-    public function setKey(string $key)
-    {
-        $this->key = $key;
-    }
-
-
-    public function encode(string $uniqueId, string $signature)
-    {
-        $this->uniqueId = $uniqueId;
-        $this->signature = $signature;
+        self::$uniqueId = $uniqueId;
+        self::$signature = $signature;
         return [
-            'access_token' => $this->create(),
-            'refresh_token' => $this->create(false)
+            'access_token' => static::create(),
+            'refresh_token' => static::create(false)
         ];
     }
 
 
-    public function decode()
+    public static function decode(string $token = '')
     {
-        return $this->check();
+        if (empty($token)){
+            static::check();
+        }else{
+            static::$data = (array)FirebaseJwt::decode($token,config('paa.jwt.key'),['HS256']);
+        }
+        return static::$data;
     }
 
-    public function decrypt(string $jwt)
-    {
-        return (array)\Firebase\JWT\JWT::decode($jwt, $this->key, ['HS256']);
-    }
-
-    public function check()
-    {
-
-        if ($authorization = request()->header('authorization')) {
-            try {
-                list($type, $token) = explode(' ', $authorization);
-            } catch (\Exception $exception) {
-                throw new AuthenticationException('authorization信息不正确');
-            }
-
-            if ($type !== $this->type) {
-                throw new AuthenticationException('接口认证方式需为Bearer');
-            }
-
-            if (!$token) {
-                throw new AuthenticationException();
-            }
-
-            try {
-                return (array)\Firebase\JWT\JWT::decode($token, $this->key, ['HS256']);
-            } catch (\Firebase\JWT\SignatureInvalidException $exception) {  //签名不正确
-                throw new AuthenticationException('令牌签名不正确');
-            } catch (\Firebase\JWT\BeforeValidException $exception) {  // 签名在某个时间点之后才能用
-                throw new AuthenticationException('令牌尚未生效');
-            } catch (\Firebase\JWT\ExpiredException $exception) {  // token过期
-                throw new AuthenticationException('令牌已过期，刷新浏览器重试');
-            } catch (\UnexpectedValueException $exception) {
-                throw new AuthenticationException('access_token不正确，' . $exception->getMessage());
-            } catch (\Exception $exception) {  //其他错误
-                throw new AuthenticationException($exception->getMessage());
-            }
+    public static function getHeaderAuthorization(){
+        $authorization = request()->header(config('paa.jwt.param'));
+        if (empty($authorization)){
+            throw new AuthenticationException();
+        }
+        try {
+            list($type, $token) = explode(' ', $authorization);
+        } catch (\Exception $exception) {
+            throw new AuthenticationException('authorization信息不正确');
+        }
+        if ($type !== config('paa.jwt.type')) {
+            throw new AuthenticationException('接口认证方式需为'.config('paa.jwt.param'));
         }
 
-        throw new AuthenticationException('请求header未携带authorization信息');
-
-
+        if (!$token) {
+            throw new AuthenticationException();
+        }
+        return [$type, $token];
     }
 
-    public function refresh()
+
+    public static function check():void
     {
-        $payload = $this->decode();
-        $this->uniqueId = $payload['uniqueId'];
-        $this->signature = $payload['signature'];
-        return $this->create();
+        list($type, $token) = static::getHeaderAuthorization();
+        try {
+            static::$data = (array)\Firebase\JWT\JWT::decode($token, config('paa.jwt.key'), ['HS256']);
+        } catch (\Firebase\JWT\SignatureInvalidException $exception) {  //签名不正确
+            throw new AuthenticationException('令牌签名不正确');
+        } catch (\Firebase\JWT\BeforeValidException $exception) {  // 签名在某个时间点之后才能用
+            throw new AuthenticationException('令牌尚未生效');
+        } catch (\Firebase\JWT\ExpiredException $exception) {  // token过期
+            throw new AuthenticationException('令牌已过期，刷新浏览器重试');
+        } catch (\UnexpectedValueException $exception) {
+            throw new AuthenticationException('access_token不正确，' . $exception->getMessage());
+        } catch (\Exception $exception) {  //其他错误
+            throw new AuthenticationException($exception->getMessage());
+        }
+    }
+
+    public static function refresh()
+    {
+        $payload = static::decode();
+        self::$uniqueId = $payload['uniqueId'];
+        self::$signature = $payload['signature'];
+        return ['access_token'=>static::create()];
     }
 
 
     /**
      * 创建JWT鉴权
      * @param bool $expire 是否会失效 true|false
-     * @param int $time 过期时长
      * @return string
+     * @throws AuthenticationException
      */
-    private function create(bool $expire = true,int $time = 7200){
-        $payload = [
-            'iss' => 'TRR', //签发者
-            'iat' => time(), //什么时候签发的
-            'exp' => time() + 7200 , //过期时间
-            'uniqueId' => $this->uniqueId,
-            'signature' => $this->signature
-        ];
-        $expire === true && $payload['exp'] = $payload['iat'] + $time;
-        return FirebaseJwt::encode($payload, $this->key);
+    private static function create(bool $expire = true){
+        $payload = config('paa.jwt.payload');
+        if (empty($payload)){
+            throw new AuthenticationException('请检查paa配置文件中jwt选项是否正确');
+        }
+        $payload['iat'] = time();
+        $payload['uniqueId'] = static::$uniqueId;
+        $payload['signature'] = static::$signature;
+        if ($expire === true) {
+            $payload['exp'] = $payload['iat'] + config('paa.jwt.time');
+        }else{
+            unset($payload['exp']);
+        }
+        return FirebaseJwt::encode($payload, config('paa.jwt.key'), 'HS256');
     }
 }

@@ -17,7 +17,7 @@ return [
     // 合并路由规则
     'route_rule_merge'      => false,
     // 路由是否完全匹配
-    'route_complete_match'  => false,
+    'route_complete_match'  => true,
     // 访问控制器层名称
     'controller_layer'      => 'controller',
     // 空控制器名

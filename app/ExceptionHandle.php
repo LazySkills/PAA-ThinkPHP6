@@ -59,15 +59,11 @@ class ExceptionHandle extends Handle
             return parent::render($request, $e);
         }
 
-        $errorCode = function () {
-            return $this->error_code ?? 1000;
-        };
-
         // 添加自定义异常处理机制
         return \response(
             [
                 'msg' => $e->getMessage() ?? '服務器內部錯誤，不想告訴你',
-                'error_code' =>  $errorCode->call($e) ?? 1000,
+                'error_code' =>  $this->error_code ?? 1000,
                 'request_url' => $request->method() . ' ' . $request->url()
             ],
             $e->getCode() ?? 500,
