@@ -206,12 +206,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LazySkills/think-annotation.git",
-                "reference": "ef79ae3cac9d063f1dd2f8d32083a11567eb6270"
+                "reference": "8ad028bf40e80d48a414d6e34e347a1d381d36e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LazySkills/think-annotation/zipball/ef79ae3cac9d063f1dd2f8d32083a11567eb6270",
-                "reference": "ef79ae3cac9d063f1dd2f8d32083a11567eb6270",
+                "url": "https://api.github.com/repos/LazySkills/think-annotation/zipball/8ad028bf40e80d48a414d6e34e347a1d381d36e7",
+                "reference": "8ad028bf40e80d48a414d6e34e347a1d381d36e7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -253,7 +253,7 @@
                 }
             ],
             "description": "Annotation Plus For ThinkPHP6",
-            "time": "2019-12-08T03:34:30+00:00"
+            "time": "2019-12-18T06:33:55+00:00"
         },
         {
             "name": "league/flysystem",

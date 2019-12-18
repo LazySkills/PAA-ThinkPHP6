@@ -63,6 +63,8 @@ final class Doc
                 $this->setPaaLoginOutRoute();
                 $this->setPaaRefreshRoute();
             })->middleware([\think\middleware\SessionInit::class]);
+        }else{
+            throw new \Exception("注解配置文件中'annotation.management'应该为true");
         }
     }
 
@@ -257,7 +259,7 @@ final class Doc
                 redirect('/paa/login')->send();
                 exit;
             }
-            $jwt = $this->jwt->decrypt($token);
+            $jwt = $this->jwt->decode($token);
             if (!isset($jwt['uniqueId'])) {
                 redirect('/paa/login')->send();
                 exit;
