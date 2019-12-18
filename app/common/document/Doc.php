@@ -64,7 +64,9 @@ final class Doc
                 $this->setPaaRefreshRoute();
             })->middleware([\think\middleware\SessionInit::class]);
         }else{
-            throw new \Exception("注解配置文件中'annotation.management'应该为true");
+            if (request()->url() == '/paa/index') {
+                throw new \Exception("注解配置文件中'annotation.management'应该为true");
+            }
         }
     }
 
