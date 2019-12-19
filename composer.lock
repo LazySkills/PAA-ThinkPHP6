@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26d8a816a67cc734585be27f85317a6f",
+    "content-hash": "3bf3d7a28c91f83475f41c155f804941",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -201,17 +201,71 @@
             "time": "2017-06-27T22:17:23+00:00"
         },
         {
+            "name": "lazyskills/paa-thinkphp6",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LazySkills/PAA-ThinkPHP6-Composer.git",
+                "reference": "b9904954c12e2be6c12ab4c76e75d27bd1ed88e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LazySkills/PAA-ThinkPHP6-Composer/zipball/b9904954c12e2be6c12ab4c76e75d27bd1ed88e7",
+                "reference": "b9904954c12e2be6c12ab4c76e75d27bd1ed88e7",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "firebase/php-jwt": "^5.0",
+                "lazyskills/think-annotation": "dev-master",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "think": {
+                    "services": [
+                        "think\\annotation\\Service"
+                    ],
+                    "config": {
+                        "annotation": "src/config.php"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "paa\\annotation\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "china_wangyu",
+                    "email": "china_wangyu@163.com"
+                }
+            ],
+            "description": "PAA-ThinkPHP6 Composer Package",
+            "time": "2019-12-19T09:09:10+00:00"
+        },
+        {
             "name": "lazyskills/think-annotation",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LazySkills/think-annotation.git",
-                "reference": "8ad028bf40e80d48a414d6e34e347a1d381d36e7"
+                "reference": "484622029bbf6ea947f82d735877941d1d2c3981"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LazySkills/think-annotation/zipball/8ad028bf40e80d48a414d6e34e347a1d381d36e7",
-                "reference": "8ad028bf40e80d48a414d6e34e347a1d381d36e7",
+                "url": "https://api.github.com/repos/LazySkills/think-annotation/zipball/484622029bbf6ea947f82d735877941d1d2c3981",
+                "reference": "484622029bbf6ea947f82d735877941d1d2c3981",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -222,7 +276,6 @@
             },
             "require": {
                 "doctrine/annotations": "^1.6",
-                "firebase/php-jwt": "^5.0",
                 "php-di/phpdoc-reader": "^2.1",
                 "topthink/framework": "^6.0"
             },
@@ -244,7 +297,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "Apache-2.0"
+                "MIT"
             ],
             "authors": [
                 {
@@ -253,7 +306,7 @@
                 }
             ],
             "description": "Annotation Plus For ThinkPHP6",
-            "time": "2019-12-18T06:33:55+00:00"
+            "time": "2019-12-19T09:11:12+00:00"
         },
         {
             "name": "league/flysystem",
@@ -1239,7 +1292,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "lazyskills/think-annotation": 20
+        "lazyskills/think-annotation": 20,
+        "lazyskills/paa-thinkphp6": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
