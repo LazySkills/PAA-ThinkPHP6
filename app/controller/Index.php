@@ -2,22 +2,19 @@
 
 namespace app\controller;
 
-use app\BaseController;
-use app\exception\AuthenticationException;
-use think\annotation\route\Group;
-use app\annotation\Doc;
-use app\annotation\Jwt;
-use app\annotation\Param;
-use think\annotation\route\Route;
-use think\annotation\route\Validate;
-use app\validate\User;
+use paa\annotation\{
+    Doc,Jwt,Param
+};
+use think\annotation\route\{
+    Group,Route
+};
 
 /**
  * Class Index
  * @Group("index")
  * @package app\controller
  */
-class Index extends BaseController
+class Index
 {
     public function index()
     {
