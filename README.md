@@ -13,6 +13,11 @@
 - 接口JWT注解器，`app/annotation/JWT.php`
 - 接口管理平台
 
+## 线上文档（完善中...）
+
+文档：[LazySkills/PAA-ThinkPHP6](https://lazyskills.github.io/views/php/paa-thinkphp6/)
+
+
 ## 安装源码
 
 `PAA-ThinkPHP6` 源码放于[github](https://github.com/LazySkills/PAA-thinkphp6)
