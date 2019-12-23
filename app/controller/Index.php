@@ -32,7 +32,7 @@ class Index
      * @Param(value="name",doc="名称",rule={"require","number","alphaDash"})
      * @Param(value="age",doc="年纪",rule={"require","number"})
      * @Jwt()
-     * @Doc(value="推荐测试",group="推荐",hide="false")
+     * @Doc(value="推荐测试",group="推荐",hide="true")
      */
     public function test()
     {
