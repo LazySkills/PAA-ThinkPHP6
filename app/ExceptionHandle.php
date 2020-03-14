@@ -63,12 +63,30 @@ class ExceptionHandle extends Handle
         return \response(
             [
                 'msg' => $e->getMessage() ?? '服務器內部錯誤，不想告訴你',
-                'error_code' =>  $this->error_code ?? 1000,
+                'error_code' =>  $this->getErrorCode($e),
                 'request_url' => $request->method() . ' ' . $request->url()
             ],
             $e->getCode() ?? 500,
             [],
             'json'
         );
+    }
+
+    /**
+     * 获取错误码
+     * @param Throwable $e
+     * @return int
+     */
+    private function getErrorCode(Throwable $e):int
+    {
+        $error_code = 1000;
+
+        if (property_exists($e,'error_code')){
+            $getError = function (){
+                return $this->error_code;
+            };
+            $error_code = $getError->call($e);
+        }
+        return $error_code;
     }
 }
